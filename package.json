@@ -1,6 +1,7 @@
 {
   "name": "cincel",
   "version": "1.0.0",
+  "description": "Sign web app",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -11,8 +12,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@kenkou/vue-stripe-elements": "^2.0.0",
     "@nuxtjs/axios": "^5.11.0",
-    "nuxt": "^2.13.0"
+    "@nuxtjs/dotenv": "^1.4.1",
+    "date-fns": "^1.30.1",
+    "nuxt": "^2.13.0",
+    "vue-currency-filter": "^5.1.0",
+    "vue-image-upload-resize": "^2.3.0",
+    "vue-signature-pad": "^2.0.2"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.2",

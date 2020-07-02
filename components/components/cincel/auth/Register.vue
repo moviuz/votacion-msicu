@@ -1,0 +1,148 @@
+<template>
+  <div class="mt-5">
+    <v-row justify="center" no-gutters>
+      <v-col cols="12" sm="7" md="5" class="py-4">
+        <v-form @submit.prevent="register" v-model="valid">
+          <div v-if="!not_show">
+            <label class="label">
+              Email
+              <span class="red--text">*</span>
+            </label>
+            <v-text-field
+              class="login-field"
+              v-model="credentials.email"
+              :rules="[rules.required ,rules.email]"
+              placeholder="Ingresa tu email"
+              outlined
+            ></v-text-field>
+          </div>
+          <label class="label">
+            Nombre
+            <span class="red--text">*</span>
+          </label>
+          <v-text-field
+            class="login-field"
+            v-model="credentials.name"
+            :rules="[rules.required]"
+            placeholder="Ingresa tu nombre"
+            outlined
+          ></v-text-field>
+          <label class="label">
+            RFC
+            <span class="red--text">*</span>
+          </label>
+          <v-text-field
+            class="login-field"
+            v-model="credentials.rfc"
+            :rules="[rules.required]"
+            placeholder="Ingresa tu rfc"
+            outlined
+          ></v-text-field>
+          <label class="label">
+            Contraseña
+            <span class="red--text">*</span>
+          </label>
+          <v-text-field
+            class="login-field"
+            placeholder="Ingresa tu contraseña"
+            outlined
+            :rules="[rules.required,rules.minLength(6, 'La contraseña debe de tener al menos 6 caracteres')]"
+            min="8"
+            type="password"
+            v-model="credentials.password"
+          ></v-text-field>
+          <label class="label">
+            Confirmación de contraseña
+            <span class="red--text">*</span>
+          </label>
+          <v-text-field
+            class="login-field"
+            placeholder="Confirmación de  tu contraseña"
+            outlined
+            :rules="[rules.required,rules.minLength(6, 'La contraseña debe de tener al menos 6 caracteres')]"
+            type="password"
+            v-model="password_confirmation"
+          ></v-text-field>
+          <v-checkbox v-model="checked">
+            <template v-slot:label>
+              <v-btn text class="blue--text" @click="openTab()">Acepto términos y condiciones</v-btn>
+            </template>
+          </v-checkbox>
+
+          <div class="text-center mt-2">
+            <v-btn
+              class="yellow accent-4"
+              :loading="loading"
+              color
+              type="submit"
+              variant="primary"
+              :disabled="(loading || !valid) || credentials.password !== password_confirmation || !isDisabled || !checked"
+            >Registrarme</v-btn>
+          </div>
+        </v-form>
+      </v-col>
+    </v-row>
+  </div>
+</template>
+
+<script>
+import { post } from "~/assets/js/helpers";
+import rules from "~/assets/js/rules";
+import parser from "~/assets/js/parsersApi";
+import userAvatar from "~/assets/js/userAvatar.js";
+
+export default {
+  props: {
+    email: "",
+    name: ""
+  },
+  components: {},
+  mounted() {},
+  data() {
+    return {
+      credentials: { organization_invitation_token: null, avatar: userAvatar.image },
+      password_confirmation: "",
+      loading: false,
+      valid: false,
+      not_show: false,
+      rules,
+      checked: false
+    };
+  },
+  methods: {
+    async register() {
+      if (this.valid) {
+        this.loading = true;
+        let registerA = await this.$store.dispatch(
+          "auth/register",
+          this.credentials
+        );
+        this.loading = false;
+      }
+    },
+    validEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    openTab: function() {
+      window.open(
+        "https://docs.google.com/document/d/1FYZK97n5zjsQ5Rp_q2YUw5WN5GwrcJFM87UNYTjmZIs/edit#heading=h.2df7iatxr2yi",
+        "_blank"
+      );
+    }
+  },
+  computed: {
+    //en caso de que provenga de un link de invitacion
+    invitation() {
+      return this.$store.getters.invitation;
+    },
+    isDisabled() {
+      if (this.validEmail(this.credentials.email)) {
+        return true;
+      }
+    }
+  }
+};
+</script>
+<style lang="css" scoped>
+</style>
