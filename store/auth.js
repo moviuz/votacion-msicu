@@ -34,7 +34,7 @@ const actions = {
         if (postResponse.ok == true){
           await vuexContext.dispatch('saveLogin',postResponse.payload);
           await vuexContext.dispatch('suscriptions/planProducts',{},{root:true});
-          //this.$router.push("/")
+          this.$router.push("/")
           return true;
         } else {
           return false;

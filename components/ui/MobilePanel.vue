@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mobile-panel" elevation="0">
+    <v-card class="mobile-panel primary" elevation="0">
         <v-card-text class="px-2">
             <v-row no-gutters>
                 <v-col cols="1" v-if="BackBtn">
@@ -9,10 +9,6 @@
                 </v-col>
                 <v-col :cols="slotSize" >
                     <slot name="mobile-content"></slot>
-        
-                </v-col>
-                <v-col cols="6">
-                    
                 </v-col>
             </v-row>
         </v-card-text>  
@@ -61,7 +57,7 @@ export default {
 
 <style scoped>
     .mobile-panel{
-        background-color:white!important;
+       
         border-top-left-radius: 0px!important;
         border-top-right-radius: 0px!important;
         border-bottom-right-radius: 10px!important;

@@ -10,23 +10,19 @@
     >
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
+        
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon></v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title  />
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      v-if="m_screenSize == 'lg'"
+      
       class="primary"
       :clipped-left="clipped"
       :fixed="fixed"
@@ -35,19 +31,15 @@
       elevate-on-scroll
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-if="false" />
-      <OrganizationLogo  v-if="isLoggedin" :elevation="true" :organization="currentOrganization" :size="'sm' " ></OrganizationLogo>
-        <v-spacer></v-spacer>
+        <OrganizationLogo   v-if="false" :elevation="true" :organization="currentOrganization" :size="'sm' " ></OrganizationLogo>
+        
         <img :src="imagotype" style="width:100px" alt="">
         <v-spacer ></v-spacer>
-        <ToolbarMenu style="height:100%" ></ToolbarMenu>
-
+        <ToolbarMenu  v-if="isLoggedin"></ToolbarMenu>
     </v-app-bar>
-    <v-main>
+    <v-main class="bgCincel">
       <AlertCard></AlertCard>
-      <v-container>
-        
-        <nuxt />
-      </v-container>
+      <nuxt />
     </v-main>
 
   </v-app>
@@ -70,18 +62,6 @@ export default {
       clipped: false,
       drawer: false,
       fixed: true,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
       miniVariant: true,
     
     }
@@ -98,3 +78,8 @@ export default {
   }
 }
 </script>
+<style lang="css" >
+  .v-toolbar__content{
+    height: 100%!important;
+  }
+</style>

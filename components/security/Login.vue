@@ -2,9 +2,9 @@
   <v-card class="elevation-0 transparent"  >
     <v-card-text class="">
       <v-row no-gutters justify="center" >
-        <v-col class="text-center" cols="12" sm="10" md="7">
-          <div class="title cincel-yellow" color>¡Bienvenido!</div>
-          <div class="title font-weight-bold">Ingresa tus datos</div>
+        <v-col class="" cols="12" sm="10" md="7">
+          <div class="text-center title cincel-yellow" color>¡Bienvenido!</div>
+          <div class="text-center title font-weight-bold">Ingresa tus datos</div>
         </v-col>
         <v-col cols="12" sm="9" md="8">
           <v-form @submit.prevent="login" v-model="valid" id="login-container">
@@ -60,23 +60,13 @@
                   >Iniciar sesión</v-btn>
                 </div>
                 <br  />
-                <span v-if="false">¿No tienes cuenta?</span>  
-                <nuxt-link v-if="false" nuxt exact to="/cincel/register/" class="cincel-yellow">Crea una</nuxt-link>
+                <span >¿No tienes cuenta?</span>  
+                <nuxt-link  nuxt exact to="/cincel/register/" class="primary--text">Crea una</nuxt-link>
               </v-col>
             </v-row>
           </v-form>
         </v-col>
       </v-row>
-      <v-form>
-        <v-layout align-center justify-center fill-height row wrap>
-          <v-flex id="login-box" xs3>
-            <div class="text-xs-center">
-           
-              <v-spacer></v-spacer>
-            </div>
-          </v-flex>
-        </v-layout>
-      </v-form>
     </v-card-text>
   </v-card>
 </template>
