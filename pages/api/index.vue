@@ -7,6 +7,9 @@
               <v-col cols="12">
                   <FoldersApiLayout></FoldersApiLayout>
               </v-col>
+              <v-col cols="12">
+                 <OrganizationApiLayout></OrganizationApiLayout>
+              </v-col>
           </v-row>
       </DesktopPanel>
   </div>
@@ -16,6 +19,7 @@
 import MobilePanel from '~/components/ui/MobilePanel'
 import DesktopPanel from '~/components/ui/DesktopPanel'
 import FoldersApiLayout from '~/components/folders/FoldersApiLayout'
+import OrganizationApiLayout from '~/components/organizations/OrganizationApiLayout'
 export default {
     middleware:['auth'],
     components:{
