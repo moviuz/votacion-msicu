@@ -1,40 +1,42 @@
 <template>
 <v-row row wrap>
     <v-col cols="7">
-        <v-row no-gutters class="" row wrap >
-          <v-col cols="12" class="custom-list-header">
-              <v-row no-gutters>
-                  <v-col cols="7">
-                      {{ title }}
-                  </v-col>
-                  <v-col cols="5" class="text-right">
-                      <v-btn color="" icon small @click="refreshClicked" >
-                          <v-icon>mdi-refresh</v-icon>
-                      </v-btn>
-                      <v-btn color="" small text @click="createClicked">Nuevo</v-btn>
-                  </v-col>
-              </v-row>
-          </v-col>
-          <v-col cols="12"  class="custom-list" >
-              <v-row no-gutters v-for="item in items" 
-                :key="item.id" class="custom-list-item" :class="{'active':(selectedItem && selectedItem.id == item.id)}" >
-                <v-col cols="12">
-                    <slot name="item-content" v-bind:item="item">
-                        <v-row no-gutters row wrap @click="itemClicked(item)">
-                            <v-col cols="7">
-                                <v-icon class="pr-1" v-if="iconName">{{iconName}}</v-icon>
-                                {{item[propText]}}
-                            </v-col>
-                            <v-col cols="5" class="text-right">
-                                <v-btn color="primary" small elevation="0"  @click="editClicked(item)">editar</v-btn>
-                                <v-btn color="error" small elevation="0" @click="editClicked(item)">eliminar</v-btn>
-                            </v-col>
-                        </v-row>
-                    </slot>
-                </v-col>
-              </v-row>
-          </v-col>
-      </v-row>
+        <v-skeleton-loader v-if="rendering"  type="card-heading, list-item, list-item, list-item"></v-skeleton-loader>  
+        <v-row v-if="!rendering" no-gutters class="" row wrap >
+            <v-col cols="12" class="custom-list-header">
+                <v-row no-gutters>
+                    <v-col cols="7">
+                        {{ title }}
+                    </v-col>
+                    <v-col cols="5" class="text-right">
+                        <v-btn color="" icon small @click="refreshClicked" >
+                            <v-icon>mdi-refresh</v-icon>
+                        </v-btn>
+                        <v-btn color="" small text @click="createClicked">Nuevo</v-btn>
+                    </v-col>
+                </v-row>                  
+            </v-col>
+            <v-col cols="12"  class="custom-list" >
+                <v-row no-gutters v-for="item in items" 
+                    :key="item.id" class="custom-list-item" :class="{'active':(selectedItem && selectedItem.id == item.id)}" >
+                    <v-col cols="12">
+                        <slot name="item-content" v-bind:item="item">
+                            <v-row no-gutters row wrap @click="itemClicked(item)">
+                                <v-col cols="7">
+                                    <v-icon class="pr-1" v-if="iconName">{{iconName}}</v-icon>
+                                    {{item[propText]}}
+                                </v-col>
+                                <v-col cols="5" class="text-right">
+                                    <v-btn color="primary" small elevation="0"  @click="editClicked(item)">editar</v-btn>
+                                    <v-btn color="error" small elevation="0" @click="deleteClicked(item)">eliminar</v-btn>
+                                </v-col>
+                            </v-row>
+                        </slot>
+                    </v-col>
+                </v-row>
+            </v-col>
+        </v-row>
+    
     </v-col>
     <v-col cols="5" v-if="formOpen">
         <v-row no-gutters class="" row wrap >
@@ -85,6 +87,10 @@ export default {
         selectedItem:{
             type:Object,
             default:() => { {} }
+        },
+        rendering:{
+            type:Boolean,
+            default:true,
         }
     },
     data(){
@@ -132,7 +138,7 @@ export default {
     }
 
     .custom-list {
-        height: 200px;
+        height: 216px;
         display: block;
         /* border: solid 1px #373b3f63!important; */
         border: solid 1px #dfe2e6!important;

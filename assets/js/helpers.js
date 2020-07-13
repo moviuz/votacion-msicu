@@ -8,21 +8,26 @@ const customResponse = {
 export const api = {
     post:postFunction,
     get:getFunction,
+    put:putFunction,
+    delete:deleteFunction
 };
 
-async function postFunction(context,path,payload){
+async function postFunction(vue,path,payload){
     let response = {...customResponse};
     try {
-        response = await context.$axios.$post(path,payload).then(res => {
-            //console.log('entrando a then de helper %o',res);
+        response = await vue.$axios.$post(path,payload).then(res => {
+            if(res.data){
+                if(!res.data.ok){
+                    console.log('POST: esta llamada no cumple estandares => '+ path);
+                }
+                return res.data;
+            }
             return res;
         }).catch(function(e) {
-            //console.log('entrando a catch de axios/helper, %o',e);
             response.ok = false;
             response.payload = {};
             return response; 
         });
-        //console.log('custom post function helper, %o',response);
     } catch(error){
         console.log('catched Errors, %o',error);
         response.ok = false;
@@ -35,10 +40,11 @@ async function getFunction(vue,path,payload){
     let response = {...customResponse};
     try {
         response = await vue.$axios.$get(path,payload).then(res => {
-            //console.log('entrando a then de helper %o',res);
+            if(!res.ok){
+                console.log('GET:esta llamada no cumple estandares => '+ path);
+            }
             return res;
         }).catch(function(e) {
-            //console.log('entrando a catch de axios/helper, %o',e);
             response.ok = false;
             response.payload = {};
             return response; 
@@ -51,6 +57,50 @@ async function getFunction(vue,path,payload){
     return response;
 }
 
+async function putFunction(vue,path,payload){
+    let response = {...customResponse};
+    try {
+        response = await vue.$axios.put(path,payload).then(res =>{
+            if(!res.data.ok){
+                console.log('PUT: esta llamada no cumple estandares => '+ path);
+            } 
+            return res.data;
+        }).catch(function(e) {
+            response.ok = false;
+            response.payload = {};
+            return response; 
+        });
+    }catch(error){
+        console.log('catched Errors, %o',error);
+        response.ok = false;
+        response.payload = error;
+    }
+    //console.log(response);
+    return response;
+}
+
+async function deleteFunction(vue,path,payload){
+    let response = {...customResponse};
+    try{
+        response = await vue.$axios.delete(path,payload).then(res => {
+            //console.log(res);
+            if(res.data){
+                return res.data
+            }
+            return res;
+        }).catch(function(e) {
+            response.ok = false;
+            response.payload = {};
+            return response; 
+        });
+    } catch(error){
+        console.log('catched Errors, %o',error);
+        response.ok = false;
+        response.payload = error;
+    }
+    //console.log(response);
+    return response;
+}
 
 /* OTHER HELPERS */
 

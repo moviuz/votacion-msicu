@@ -4,6 +4,7 @@
         :formOpen="formOpen"
         :selectedItem="selectedFolder"
         iconName="mdi-folder"
+        :rendering="rendering"
         @createItem="createItem"
         @editItem="editItem"
         @deleteItem="deleteItem"
@@ -14,6 +15,13 @@
             {{ slotProps.item.name }} 
         </template>
         -->
+        <template slot="form-content">
+            <!-- Aqui va el selector de organizaciones -->
+            <FolderForm 
+                :folder="selectedFolder" 
+                @saveItem="saveItem" 
+                @loading="loading"></FolderForm>
+        </template>
     </ApiLayout>
 </template>
 
@@ -30,13 +38,21 @@ export default {
         return {
             selectedFolder:null,
             formOpen:false,
+            rendering:true,
+            loading:false,
         }
     },
-    mounted(){
-        this.$store.dispatch('folders/fetchFolders','',{root:true});
+    async mounted(){
+        this.rendering = true;
+        await this.refresh();
+        this.rendering = false;
     },
     methods:{
-        refresh(){},
+        async refresh(){
+            
+            let fetchResponse = await this.$store.dispatch('folders/fetchFolders','',{root:true});
+            return fetchResponse;
+        },
         createItem(){
             this.formOpen = false;
             this.selectedFolder = null;
@@ -47,17 +63,31 @@ export default {
             this.selectedFolder = item;
             this.formOpen = true;
         },
-        deleteItem(item){},
+        async deleteItem(item){
+            let deleteResponse = await this.$store.dispatch('folders/deleteFolder',item);
+            if(deleteResponse && deleteResponse.ok){
+                this.refresh();
+            }
+        },
         closeForm(item){
             this.selectedFolder = null;
             this.formOpen = false;
         },
-        saveItem(item){
+        async saveItem(item){
+            this.loading = true;
             if(item.id) {
+                let putResponse = await this.$store.dispatch('folders/updateFolder',item)
+                if(putResponse && putResponse.ok)
+                    this.formOpen = false;
                 console.log('put %o',item);
             } else {
-                console.log('post %o',item);
+                let postResponse = await this.$store.dispatch('folders/createFolder',item)
+                if(postResponse && postResponse.ok)
+                    this.formOpen = false;
+                console.log('post %o',postResponse);
             }
+            await this.refresh();
+            this.loading = false;
         }
     },
     computed:{
