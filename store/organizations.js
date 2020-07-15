@@ -1,5 +1,6 @@
-
+import { api } from "~/assets/js/helpers"
 import orgCincel from "~/data/defaultOrg";
+import { updateExpression } from "@babel/types";
 const state = () => ({
     currentOrganization:orgCincel,
     currentOrganizationUsers:[],
@@ -46,11 +47,45 @@ const mutations = {
   },
 };
 
-const actions = {};
+const actions = {
+  //Llamada para conseguir todas mis organizaciones ( es el renew para el JWT  del login , es la unica forma de obtener mis organizaciones)
+  async fetchOrganizations(vuexContext, payload) {
+    let postResponse = await api.post(this, '/login/renew')
+    if (postResponse.ok) {
+      await vuexContext.dispatch("auth/saveLogin", postResponse.payload,{root:true})
+      }
+    return postResponse
+  },
+  async createOrganization(vuexContext, payload) {
+    let postParams = {
+      name: payload.name,
+      imagotype: payload.imagotype
+    }
+    let createResponse = await api.post(this, '/organizations', postParams);
+    if (createResponse && createResponse.ok) {
+      vuexContext.dispatch('alerts/addSuccessAlert', 'se ha creado con exito la organizacion', {root:true})
+    }
+    return createResponse
+  },
+  async updateOrganization(vuexContext, payload) {
+    let postParams = {
+      name: payload.name,
+      imagotype: payload.imagotype
+    } 
+    let updateResponse = await api.put(this, '/organizations' + payload.organizationId, postParams);
+    if (updateResponse && updateResponse.ok) {
+      vuexContext.dispatch('alerts/addSuccessAlert','Se ha actualizado con exito la organizacion', {root:true})
+    }
+    return updateResponse
+  }
+};
 const getters = {
     currentOrganization:state=>{
         return state.currentOrganization;
-    }
+  },
+  getAllOrganizations: state => {
+    return state.organizations
+  }
 };
 const organizationModule = {
     state:state,
