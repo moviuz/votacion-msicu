@@ -33,8 +33,7 @@ const mutations = {
     },
     setOrganizations(state,userOrganizations){
         //console.log(userOrganizations);
-        state.organizations = userOrganizations;
-        
+        state.organizations = userOrganizations;     
     },
     setInvitation(state,invitation){
       let inv = [];
@@ -77,15 +76,45 @@ const actions = {
       vuexContext.dispatch('alerts/addSuccessAlert','Se ha actualizado con exito la organizacion', {root:true})
     }
     return updateResponse
-  }
+  },
+  // Recupera a los usuarios registrados en una organizacion
+  async getUserByOrganization(vuexContext, payload) {
+    let usersOrganization
+    if (!payload) {
+      let payload = {
+        id: 1
+      }
+      let usersOrganizationPath = '/organizations/' + payload.id + '/users'
+    usersOrganization = await api.get(this, usersOrganizationPath);
+      if (usersOrganization.ok) {
+        console.log("datos a guardar111 %o", usersOrganization.payload)
+      vuexContext.commit('setCurrentOrganizationUsers', usersOrganization.payload)
+    }
+    } else {
+    let usersOrganizationPath = '/organizations/' + payload.id + '/users'
+     usersOrganization = await api.get(this, usersOrganizationPath);
+      if (usersOrganization.ok) {
+      console.log("datos a guardar22 %o", usersOrganization.payload)
+      vuexContext.commit('setCurrentOrganizationUsers', usersOrganization.payload)
+    }
+    }
+    
+    return usersOrganization
+  },
+  /*async deleterOrganization(vuexContext, payload) {
+    let delResponse = await api.delete(this,)
+  }*/
 };
 const getters = {
     currentOrganization:state=>{
         return state.currentOrganization;
   },
-  getAllOrganizations: state => {
-    return state.organizations
-  }
+    getAllOrganizations: state => {
+      return state.organizations
+  },
+  currentOrganizationUsers: state => {
+      return state.currentOrganizationUsers
+    }
 };
 const organizationModule = {
     state:state,

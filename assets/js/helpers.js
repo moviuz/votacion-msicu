@@ -1,3 +1,4 @@
+import Roles from '~/data/Roles'
 /* CRUD HELPERS */
 
 const customResponse = {
@@ -123,4 +124,21 @@ export function decodeJwt(token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     return JSON.parse(window.atob(base64));
-  }
+};
+
+export function getCurrentRol(permissionsArray) {
+    if (permissionsArray && permissionsArray.length) {
+        if (permissionsArray.length == 0) {
+            return {
+                name: 'Owner',
+                id: 1,
+                permissions: []
+            };
+        }
+        if (permissionsArray.lenght == 9) {
+            return Roles[0];
+        } else {
+            return Roles[1];
+        }
+    }
+}

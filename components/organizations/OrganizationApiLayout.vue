@@ -60,11 +60,13 @@ export default {
       this.formOpen = false;
       this.selectedOrganization = item;
       this.formOpen = true;
+      this.$emit("getOrganization", this.selectedOrganization);
     },
     deleteItem(item) {},
     closeForm(item) {
       this.selectedOrganization = null;
       this.formOpen = false;
+      this.$emit("closeUser", false);
     },
     async saveItem(item) {
       this.loading = true;
@@ -93,4 +95,15 @@ export default {
 };
 </script>
 <style scoped>
+.desktop-card {
+  box-shadow: none !important;
+  overflow: auto;
+  border-radius: 4px !important;
+  border: solid 1px #dfe2e6 !important;
+}
+.dash-card {
+  border-radius: 6px !important;
+  box-shadow: 0 2px 20px 4px rgba(0, 0, 0, 0.05) !important;
+  border: solid 1px rgba(132, 140, 149, 0.1);
+}
 </style> 
