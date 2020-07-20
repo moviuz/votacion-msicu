@@ -35,7 +35,8 @@ export default {
   },
   data() {
     return {
-      organization: null
+      organization: null,
+      refreshComponentListUser: false
     };
   },
   methods: {

@@ -79,32 +79,37 @@ const actions = {
   },
   // Recupera a los usuarios registrados en una organizacion
   async getUserByOrganization(vuexContext, payload) {
-    let usersOrganization
-    if (!payload) {
-      let payload = {
-        id: 1
-      }
-      let usersOrganizationPath = '/organizations/' + payload.id + '/users'
-    usersOrganization = await api.get(this, usersOrganizationPath);
-      if (usersOrganization.ok) {
-        console.log("datos a guardar111 %o", usersOrganization.payload)
-      vuexContext.commit('setCurrentOrganizationUsers', usersOrganization.payload)
-    }
-    } else {
     let usersOrganizationPath = '/organizations/' + payload.id + '/users'
-     usersOrganization = await api.get(this, usersOrganizationPath);
+    let  usersOrganization = await api.get(this, usersOrganizationPath);
       if (usersOrganization.ok) {
-      console.log("datos a guardar22 %o", usersOrganization.payload)
       vuexContext.commit('setCurrentOrganizationUsers', usersOrganization.payload)
     }
-    }
-    
     return usersOrganization
   },
   /*async deleterOrganization(vuexContext, payload) {
     let delResponse = await api.delete(this,)
   }*/
+  async sendInvitationOrganization(vuexContext, payload) {
+    let postParams = {
+      invitate_email :payload.email,
+      message: "Acepta la invitacion para ser miembro de mi equipo de trabajo"
+    };
+   let  invitationPath = 'organizations/' +payload.ordanizationId +'/organization_invitations/'
+    let postResponse = await api.post(this, invitationPath, postParams);
+    if (!postResponse && postResponse.ok) {
+      vuexContext.dispatch('alerts/addSuccessAlert', 'Se ha enviado con exito la invitacion', { root: true })
+      console.log("RESPUESTA DE INVITACION PERMISO %o", postResponse)
+    /*  let permissionsRequest = paylod.permissions.map(function (permiso) {
+        return {
+          organization_invitation_id:postRes,...permiso
+        }
+      })*/
+    }
+    return postResponse;
+  }
 };
+
+
 const getters = {
     currentOrganization:state=>{
         return state.currentOrganization;

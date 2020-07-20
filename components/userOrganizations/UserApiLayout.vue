@@ -5,7 +5,7 @@
     :selectedItem="selectedUser"
     :rendering="rendering"
     iconName="mdi-account-check"
-    title="Api Usuarior de Organizaciones"
+    title="Api Usuarios de Organizaciones"
     @createItem="createItem"
     @editItem="editItem"
     @deleteItem="deleteItem"
@@ -27,6 +27,10 @@ export default {
       default: function() {
         return { id: 0 };
       }
+    },
+    refreshComponentListUser: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -38,24 +42,26 @@ export default {
       selectedUser: null,
       formOpen: false,
       rendering: true,
-      loading: false,
-      organizationData: this.organization
+      loading: false
+      // organizationData: this.organization
     };
   },
   async mounted() {
-    console.log("entro a mounted");
     this.rendering = true;
     await this.refresh();
     this.rendering = false;
   },
   methods: {
     async refresh() {
-      let fetchResponse = await this.$store.dispatch(
-        "organizations/getUserByOrganization",
-        this.organization,
-        { root: true }
-      );
-      return fetchResponse;
+      if (this.organization && this.organization.id > 0) {
+        let fetchResponse = await this.$store.dispatch(
+          "organizations/getUserByOrganization",
+          this.organization,
+          { root: true }
+        );
+        this.closeForm();
+        return fetchResponse;
+      }
     },
     createItem() {
       this.formOpen = false;
@@ -72,11 +78,27 @@ export default {
       this.selectedUser = null;
       this.formOpen = false;
     },
-    saveItem(item) {}
+    async saveItem(item) {
+      item.ordanizationId = this.organization.id;
+      console.log("RECUPERANDO ITEMS VALORES %o", item);
+      this.loading = true;
+      if (item.invite_rol) {
+        let putResponse = await this.$store.dispatch(
+          "organizations/sendInvitationOrganization",
+          item
+        );
+      }
+    }
   },
   computed: {
     users() {
       return this.$store.getters["organizations/currentOrganizationUsers"];
+    }
+  },
+  watch: {
+    organization: function() {
+      console.log("watchList check");
+      this.refresh();
     }
   }
 };

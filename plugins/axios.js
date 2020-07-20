@@ -1,5 +1,6 @@
 
-import  {errors}  from '~/assets/js/helpers.js'
+import { errors } from '~/assets/js/helpers.js'
+import parsers from "~/assets/js/parsersApi";
 export default function ({ $axios, redirect , store}) {
   const customResponse = {
     ok:true,
@@ -13,22 +14,25 @@ export default function ({ $axios, redirect , store}) {
   
   $axios.onResponse(response => {
     let resp = {...customResponse,intercepted:true};
-    //console.log('interceptor onResponse %o',response);
-    if(response.data.ok && response.data.ok == false){
+    //console.log('interceptor onResponse %o', response);
+    if (response.data.ok && response.data.ok == false) {
         resp.ok = false,
         resp.payload = response.data.payload;
-     
+    } else if (!response.data.ok && response.data.ok == false) {
+      resp.ok == false,
+        resp.payload = response.data.payload;
+      store.dispatch('alerts/addErrorAlert',parsers.errors(response.request.response))
     } else if (response.data.errors && response.data.errors.authentication) {
         resp.ok = false;
         resp.payload = response.data;
         store.dispatch('alerts/addErrorAlert',response.data.errors.authentication);
       //throw new Error(response.data.errors.authentication);
-    } else if(response.data.errors && response.data.errors.constructor === Array){
+    } else if (response.data.errors && response.data.errors.constructor === Array) {
       resp.ok = false;
       resp.payload = {};
-      console.log('se detecta error en la raiz tipo array ',errors(response.data.errors) );
+      console.log('se detecta error en la raiz tipo array ',errors(response.data) );
       store.dispatch('alerts/addErrorAlert',errors(response.data.errors) );
-    } else if(response.data.ok == true){
+    } else if (response.data.ok == true) {
       resp.payload = response.data.payload;
     } else {
       resp.payload = response.data;
@@ -41,7 +45,7 @@ export default function ({ $axios, redirect , store}) {
 
   $axios.onError(error => {
     let resp = {...customResponse,intercepted:true};
-    //console.log('interceptor onError %o', error);
+    console.log('interceptor onError %o', error);
     store.dispatch('alerts/addErrorAlert',error);
     throw new Error();
   });

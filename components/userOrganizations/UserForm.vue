@@ -60,10 +60,6 @@ export default {
         email: null,
         name: null,
         invite_rol: null
-        /*invite_rol: {
-          name: null,
-          id: null
-        }*/
       },
       valid: false,
       roles: Roles
@@ -71,7 +67,7 @@ export default {
   },
   methods: {
     clearForm() {
-      if (this.user && this.user.id) {
+      if (this.user && this.user.name) {
         this.newUserInvite.email = this.user.email;
         this.newUserInvite.name = this.userRol(this.user);
         if (this.newUserInvite.name === "Admin") {
@@ -85,7 +81,10 @@ export default {
       this.$refs.user_form.resetValidation();
     },
     saveItem() {
-      console.log("pico guardar");
+      this.newUserInvite.permissions = this.getRolPermission(
+        this.newUserInvite.invite_rol
+      );
+      this.$emit("saveItem", this.newUserInvite);
     },
     //expresion regular para un email valido
     validEmail(email) {
@@ -96,18 +95,27 @@ export default {
     userRol(user) {
       let currentRol = getCurrentRol(user.permissions);
       return currentRol.name;
+    },
+    getRolPermission(idRol) {
+      let permissions;
+      for (let i in Roles) {
+        if (Roles[i].id == idRol) permissions = [...Roles[i].permissions];
+      }
+      return permissions;
     }
   },
   computed: {
     aviableSaving() {
-      let nameRol = this.userRol(this.user);
+      let nameRol;
       let idRolControl;
-      if (nameRol == "Admin") {
-        idRolControl = 2;
-      } else {
-        idRolControl = 3;
-      }
-      if (this.user && this.user.id) {
+
+      if (this.user && this.user) {
+        nameRol = this.userRol(this.user);
+        if (nameRol == "Admin") {
+          idRolControl = 2;
+        } else {
+          idRolControl = 3;
+        }
         if (
           this.newUserInvite.email != this.user.email ||
           this.newUserInvite.invite_rol != idRolControl
