@@ -16,8 +16,8 @@ export default {
 		let first = true
 		for (let [key, value] of Object.entries(errorsObject)) {
 			if (errorsObject.hasOwnProperty(key)) {
-			  if (first) auxString +=  `${key}:${value.join(',')}`
-				else auxString +=  `, ${key}:${value.join(',')}`
+			  if (first) auxString +=  ` ${value.join(', ')}`
+				else auxString +=  `${value.join(', ')}`
 				first = false
 			}
 		}

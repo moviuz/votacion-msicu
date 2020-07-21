@@ -13,9 +13,10 @@ const mutations = {
 const actions = {
     // LLamada para conseguir todos los folders de mi cuenta o de una organizacion
     async fetchFolders(vuexContext,payload) {
-        let fetchPath = '/folders'
-        if(payload && payload.organizationId){
-            fetchPath = fetchPath+'?organization_id='+payload.organizationId;
+        let fetchPath = '/folders';
+        let currentOrg = vuexContext.rootGetters['organizations/currentOrganization'];
+        if(currentOrg.id != 0){
+            fetchPath = fetchPath+'?organization_id='+currentOrg.id;
         }
         let allFolders = await api.get(this,fetchPath);
         if(allFolders.ok){

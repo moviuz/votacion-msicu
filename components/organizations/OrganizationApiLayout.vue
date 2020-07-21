@@ -1,16 +1,25 @@
 <template>
   <ApiLayout
     :items="organizations"
+    itemsName="organizaciones"
     :formOpen="formOpen"
     :selectedItem="selectedOrganization"
     :rendering="rendering"
     title="Api Organizaciones"
     @createItem="createItem"
+    @itemClicked="itemClicked"
     @editItem="editItem"
     @deleteItem="deleteItem"
     @closeForm="closeForm"
     @refresh="refresh"
-  >
+  > 
+    <template slot="default-item">
+      <v-row no-gutters>
+          <v-col cols="12">
+            <strong> Organizacion actual:</strong>  {{ selectedOrganization.name }}
+          </v-col>
+      </v-row>
+    </template>
     <template slot="form-content">
       <OrganizationForm
         :organization="selectedOrganization"
@@ -21,17 +30,16 @@
   </ApiLayout>
 </template>
 <script>
-import OrganizationList from "~/components/organizations/OrganizationList";
+//import OrganizationList from "~/components/organizations/OrganizationList";
 import OrganizationForm from "~/components/organizations/OrganizationForm";
 //import OrganizationUserForm from "~/components/organizations/OrganizationUserForm";
 export default {
   components: {
-    OrganizationList,
     OrganizationForm
   },
   data() {
     return {
-      selectedOrganization: null,
+      selectedOrganization: {},
       formOpen: false,
       rendering: true,
       loading: false
@@ -40,6 +48,7 @@ export default {
   async mounted() {
     this.rendering = true;
     await this.refresh();
+    this.selectedOrganization = this.$store.getters['organizations/currentOrganization'];
     this.rendering = false;
   },
   methods: {
@@ -53,20 +62,27 @@ export default {
     },
     createItem() {
       this.formOpen = false;
-      this.selectedOrganization = null;
+      //this.selectedOrganization = null;
       this.formOpen = true;
     },
     editItem(item) {
       this.formOpen = false;
       this.selectedOrganization = item;
-      this.formOpen = true;
-      this.$emit("getOrganization", this.selectedOrganization);
+      this.$emit("setOrganization", this.selectedOrganization);
+      if(item.id != 0){
+        this.formOpen = true;
+      }
+      
+    },
+    itemClicked(item){
+      this.selectedOrganization = item;
+      this.$emit("setOrganization", this.selectedOrganization);
     },
     deleteItem(item) {},
     closeForm(item) {
-      this.selectedOrganization = null;
+      //this.selectedOrganization = null;
       this.formOpen = false;
-      this.$emit("closeUser", false);
+      //this.$emit("closeUser", false);
     },
     async saveItem(item) {
       this.loading = true;
