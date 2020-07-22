@@ -12,6 +12,9 @@
         <v-col v-if="this.organization != null" cols="12">
           <UserApiLayout :organization="organization"></UserApiLayout>
         </v-col>
+        <v-col>
+          <PlansApiLayout></PlansApiLayout>
+        </v-col>
       </v-row>
     </DesktopPanel>
   </div>
@@ -23,6 +26,7 @@ import DesktopPanel from "~/components/ui/DesktopPanel";
 import FoldersApiLayout from "~/components/folders/FoldersApiLayout";
 import OrganizationApiLayout from "~/components/organizations/OrganizationApiLayout";
 import UserApiLayout from "~/components/userOrganizations/UserApiLayout";
+import PlansApiLayout from "~/components/plans/PlansApiLayout";
 //import OrganizationUserApiLayout con una bandera
 export default {
   middleware: ["auth"],
@@ -31,7 +35,8 @@ export default {
     DesktopPanel,
     FoldersApiLayout,
     OrganizationApiLayout,
-    UserApiLayout
+    UserApiLayout,
+    PlansApiLayout
   },
   data() {
     return {
