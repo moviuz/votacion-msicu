@@ -55,6 +55,7 @@ const actions = {
       }
     return postResponse
   },
+  // Crea una organizacion
   async createOrganization(vuexContext, payload) {
     let postParams = {
       name: payload.name,
@@ -66,6 +67,11 @@ const actions = {
     }
     return createResponse
   },
+  // Manda a mutation una organizacion.
+  async setCurrentOrganization(vuexContext,organization){
+    vuexContext.commit('setCurrentOrganization',organization);
+  },
+  // Actualiza la informacion de una organizacion
   async updateOrganization(vuexContext, payload) {
     let postParams = {
       name: payload.name,
@@ -78,47 +84,84 @@ const actions = {
     return updateResponse
   },
   // Recupera a los usuarios registrados en una organizacion
-  async getUserByOrganization(vuexContext, payload) {
-    let usersOrganizationPath = '/organizations/' + payload.id + '/users'
+  async getOrganizationUsers(vuexContext, payload) {
+    let currentOrganization = vuexContext.getters.currentOrganization;
+    let usersOrganizationPath = '/organizations/' + currentOrganization.id + '/users'
     let  usersOrganization = await api.get(this, usersOrganizationPath);
       if (usersOrganization.ok) {
       vuexContext.commit('setCurrentOrganizationUsers', usersOrganization.payload)
     }
     return usersOrganization
   },
+  async getOrganizationInvitations(vuexContext, organization) {
+    let currentOrganization = vuexContext.getters.currentOrganization;
+    let invitations;
+    if(currentOrganization.id != 0){
+      invitations = await api.get(this,'/organizations/'+currentOrganization.id+'/organization_invitations', {});
+      if(invitations.ok){
+        vuexContext.commit('setCurrentOrganizationInvites',invitations.payload);
+      }
+    }
+    
+    
+    return invitations;
+  },
   /*async deleterOrganization(vuexContext, payload) {
     let delResponse = await api.delete(this,)
   }*/
   async sendInvitationOrganization(vuexContext, payload) {
+    // payload debe de traer los datos de invitacion, el unico requerido es el correo y los permisos, se asume que ya existe el array de permisos..
+    let currentOrganization = vuexContext.getters.currentOrganization;
+    let assignedPermission = false;
     let postParams = {
-      invitate_email :payload.email,
+      invite_email :payload.email,
+      invite_name:  payload.name,
       message: "Acepta la invitacion para ser miembro de mi equipo de trabajo"
     };
-   let  invitationPath = 'organizations/' +payload.ordanizationId +'/organization_invitations/'
-    let postResponse = await api.post(this, invitationPath, postParams);
-    if (!postResponse && postResponse.ok) {
-      vuexContext.dispatch('alerts/addSuccessAlert', 'Se ha enviado con exito la invitacion', { root: true })
-      console.log("RESPUESTA DE INVITACION PERMISO %o", postResponse)
-    /*  let permissionsRequest = paylod.permissions.map(function (permiso) {
-        return {
-          organization_invitation_id:postRes,...permiso
-        }
-      })*/
+    if(currentOrganization.id != 0){
+      let  invitationPath = 'organizations/' +currentOrganization.id +'/organization_invitations/'
+      let postResponse = await api.post(this, invitationPath, postParams);
+      if (!postResponse && postResponse.ok) {
+        //vuexContext.dispatch('alerts/addSuccessAlert', 'Se ha enviado con exito la invitacion', { root: true })
+        let permissionsRequest = paylod.permissions.map(function (permiso) {
+          return {
+            organization_invitation_id:postRes,...permiso
+          }
+        });
+        assignedPermission =  await vuexContext.dispatch('addPermissionsInvitationOrganization',permissionsRequest);
+      }
+      console.log(postResponse,assignedPermission)
+      return postResponse;
     }
-    return postResponse;
-  }
+    
+  },
+  // Asigna permisos a una invitacion a participar en organizacion
+  async addPermissionsInvitationOrganization(vuexContext, payload) {
+    let currentOrganization = vuexContext.getters.currentOrganization;
+    //console.log(currentOrganization,payload);
+    let path = '/organizations/'+currentOrganization.id+'/organization_permissions/batch';
+    let invitationsReady = [];
+    let postResponse = await api.post(this,path,{permissions:payload});
+      if(postResponse.ok){
+        vuexContext.dispatch('alerts/addSuccessAlert','Invitaciones creadas correctamente',{root:true})
+      } 
+      return postResponse.data.payload;
+  },
 };
 
 
 const getters = {
     currentOrganization:state=>{
         return state.currentOrganization;
-  },
+    },
     getAllOrganizations: state => {
       return state.organizations
-  },
-  currentOrganizationUsers: state => {
+    },
+    currentOrganizationUsers: state => {
       return state.currentOrganizationUsers
+    },
+    currentOrganizationInvites:state => {
+      return state.currentOrganizationInvites;
     }
 };
 const organizationModule = {

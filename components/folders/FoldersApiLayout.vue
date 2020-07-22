@@ -4,6 +4,7 @@
     :formOpen="formOpen"
     :selectedItem="selectedFolder"
     iconName="mdi-folder"
+    title="Api Folders"
     :rendering="rendering"
     @createItem="createItem"
     @editItem="editItem"
@@ -46,11 +47,13 @@ export default {
   },
   methods: {
     async refresh() {
+      let currentOrganization = this.$store.getters['organizations/currentOrganization'];
       let fetchResponse = await this.$store.dispatch(
         "folders/fetchFolders",
         "",
         { root: true }
       );
+
       return fetchResponse;
     },
     createItem() {

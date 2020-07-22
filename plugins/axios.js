@@ -15,13 +15,11 @@ export default function ({ $axios, redirect , store}) {
   $axios.onResponse(response => {
     let resp = {...customResponse,intercepted:true};
     //console.log('interceptor onResponse %o', response);
-    if (response.data.ok && response.data.ok == false) {
-        resp.ok = false,
-        resp.payload = response.data.payload;
-    } else if (!response.data.ok && response.data.ok == false) {
+    if (!response.data.ok && response.data.ok == false) {
+      //console.log('se cacha como error con respuesta estandar',response)
       resp.ok == false,
-        resp.payload = response.data.payload;
-      store.dispatch('alerts/addErrorAlert',parsers.errors(response.request.response))
+      resp.payload = {};
+      store.dispatch('alerts/addErrorAlert',parsers.errors(response.data.errors))
     } else if (response.data.errors && response.data.errors.authentication) {
         resp.ok = false;
         resp.payload = response.data;
