@@ -98,12 +98,10 @@ const actions = {
     let invitations;
     if(currentOrganization.id != 0){
       invitations = await api.get(this,'/organizations/'+currentOrganization.id+'/organization_invitations', {});
-      if(invitations.ok){
+      if (invitations.ok) {
         vuexContext.commit('setCurrentOrganizationInvites',invitations.payload);
       }
     }
-    
-    
     return invitations;
   },
   /*async deleterOrganization(vuexContext, payload) {

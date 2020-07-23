@@ -1,6 +1,7 @@
 <template>
   <ApiLayout
     :items="plans"
+    itemsName="plans"
     :formOpen="formOpen"
     :selectedItem="selectedPlan"
     :rendering="rendering"

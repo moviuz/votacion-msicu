@@ -10,9 +10,15 @@
         <v-col v-if="this.organization != null" cols="12">
           <UserApiLayout :organization="organization"></UserApiLayout>
         </v-col>
+        <v-col v-if="this.organization != null" cols="12">
+          <div class="api-separator">
+            <InvitationApiLayout :organization="organization"></InvitationApiLayout>
+          </div>
+        </v-col>
         <v-col cols="12">
-          <div class="api-separator"></div>
-          <PlansApiLayout></PlansApiLayout>
+          <div class="api-separator">
+            <PlansApiLayout></PlansApiLayout>
+          </div>
         </v-col>
         <v-col cols="12">
           <div class="api-separator">
@@ -29,8 +35,9 @@ import MobilePanel from "~/components/ui/MobilePanel";
 import DesktopPanel from "~/components/ui/DesktopPanel";
 import FoldersApiLayout from "~/components/folders/FoldersApiLayout";
 import OrganizationApiLayout from "~/components/organizations/OrganizationApiLayout";
-import UserApiLayout from "~/components/userOrganizations/UserApiLayout";
+import UserApiLayout from "~/components/organizations/users/UserApiLayout";
 import PlansApiLayout from "~/components/plans/PlansApiLayout";
+import InvitationApiLayout from "~/components/organizations/usersInvitation/UserInvitationApiLayout";
 //import OrganizationUserApiLayout con una bandera
 export default {
   middleware: ["auth"],
@@ -40,7 +47,8 @@ export default {
     FoldersApiLayout,
     OrganizationApiLayout,
     UserApiLayout,
-    PlansApiLayout
+    PlansApiLayout,
+    InvitationApiLayout
   },
   data() {
     return {
