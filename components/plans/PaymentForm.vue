@@ -117,17 +117,7 @@ export default {
     },
     async saveItem() {
       const cardNumber = this.$refs.cardNumber.element();
-      const stripe = await getStripe();
-      const paymentStripe = await stripe.createPaymentMethod({
-        type: "card",
-        card: cardNumber
-      });
-      console.log(
-        "paymentStripe.paymentMethod.id%o",
-        paymentStripe.paymentMethod.id
-      );
-      console.log("datos de tarjeta %o", cardNumber);
-      //this.$emit(saveItem, this.paymentData);
+      this.$emit("saveItem", cardNumber);
     },
     update() {
       this.complete = this.number && this.expiry && this.cvc;

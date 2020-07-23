@@ -17,6 +17,7 @@
   </ApiLayout>
 </template>
 <script>
+import { getStripe, Stripe } from "@kenkou/vue-stripe-elements";
 import PaymentForm from "~/components/plans/PaymentForm";
 export default {
   components: {
@@ -24,6 +25,7 @@ export default {
   },
   data() {
     return {
+      Stripe,
       selectedPlan: null,
       formOpen: false,
       rendering: true,
@@ -38,7 +40,6 @@ export default {
     this.rendering = true;
     await this.refresh();
     await this.stripeService();
-
     this.rendering = false;
   },
   methods: {
@@ -46,7 +47,12 @@ export default {
       let fetchPlans = await this.$store.dispatch("plans/fetchPlans", "", {
         root: true
       });
-      return fetchPlans;
+      let fetchDocuments = await this.$store.dispatch(
+        "plans/fetchDocuments",
+        "",
+        { root: true }
+      );
+      return true;
     },
     editItem(item) {
       this.formOpen = false;
@@ -59,8 +65,12 @@ export default {
       this.formOpen = false;
     },
     deleteItem(item) {},
-    saveItem(item) {
-      console.log("estas en save item de planes %o", item);
+    async saveItem(item) {
+      const stripe = await getStripe();
+      const paymentStripe = await stripe.createPaymentMethod({
+        type: "card",
+        card: item
+      });
     },
     async stripeService() {
       let tok = await this.$store.dispatch("payments/stipeToken", "", {

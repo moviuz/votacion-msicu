@@ -15,14 +15,14 @@ const actions = {
         if (postResponse.ok) {
             console.log("postResponse??? %o", postResponse)
             let processedPlan=[]
-            for (let i = 0; i < postResponse.payload.length; i++) {
-                let size;              
+            for (let i = 0; i < postResponse.payload.length; i++) {              
                 for (let x = 0; x < postResponse.payload[i].subscription_plans.length; x++) {
                     if (postResponse.payload[i].name != 'base') {
                         
                     if (postResponse.payload[i].subscription_plans[x].status == "active") {
                         let  processedPlanObj = {
-                            id: postResponse.payload[i].id
+                            id: postResponse.payload[i].id,
+                            extraPayment:false
                        }
                         processedPlanObj.name = postResponse.payload[i].name + ' '+postResponse.payload[i].subscription_plans[x].name,
                         processedPlanObj.id = postResponse.payload[i].subscription_plans[x].id,
@@ -37,7 +37,25 @@ const actions = {
         }
         
         return postResponse
-        }
+    },
+    async fetchDocuments() {
+        let postResponse = await api.get(this, '/benefits_packets_plans')
+        if (postResponse.ok) {
+            console.log("respuesta de documenos a procesar %o", postResponse)
+            let processedPacket = []
+            for (let i = 0; i < postResponse.payload.length; i++){
+                if (postResponse.payload[i].status == 'active') {
+                    let processedPacketObject = {
+                        id: postResponse[i].id,
+                        name: postResponse[i].name,
+                        amount: postResponse[i].amount,
+                        extraPayment: true
+                    }
+                    processedPacket.push(processedPacketObject)
+                }
+            }
+            }
+    },
        
     }
 

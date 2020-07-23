@@ -5,6 +5,7 @@
     :formOpen="formOpen"
     :selectedItem="selectedInvitation"
     :rendering="rendering"
+    iconName="mdi-email-send-outline"
     title="Api Invitaciones Usuarios Organizaciones"
     @createItem="createItem"
     @editItem="editItem"
