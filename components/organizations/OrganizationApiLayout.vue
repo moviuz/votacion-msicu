@@ -12,12 +12,13 @@
     @deleteItem="deleteItem"
     @closeForm="closeForm"
     @refresh="refresh"
-  > 
+  >
     <template slot="default-item">
       <v-row no-gutters>
-          <v-col cols="12">
-            <strong> Organizacion actual:</strong>  {{ selectedOrganization.name }}
-          </v-col>
+        <v-col cols="12">
+          <strong>Organizacion actual:</strong>
+          {{ selectedOrganization.name }}
+        </v-col>
       </v-row>
     </template>
     <template slot="form-content">
@@ -48,7 +49,9 @@ export default {
   async mounted() {
     this.rendering = true;
     await this.refresh();
-    this.selectedOrganization = this.$store.getters['organizations/currentOrganization'];
+    this.selectedOrganization = this.$store.getters[
+      "organizations/currentOrganization"
+    ];
     this.rendering = false;
   },
   methods: {
@@ -69,12 +72,11 @@ export default {
       this.formOpen = false;
       this.selectedOrganization = item;
       this.$emit("setOrganization", this.selectedOrganization);
-      if(item.id != 0){
+      if (item.id != 0) {
         this.formOpen = true;
       }
-      
     },
-    itemClicked(item){
+    itemClicked(item) {
       this.selectedOrganization = item;
       this.$emit("setOrganization", this.selectedOrganization);
     },

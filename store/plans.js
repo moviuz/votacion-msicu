@@ -46,10 +46,10 @@ const actions = {
             for (let i = 0; i < postResponse.payload.length; i++){
                 if (postResponse.payload[i].status == 'active') {
                     let processedPacketObject = {
-                        id: postResponse[i].id,
-                        name: postResponse[i].name,
-                        amount: postResponse[i].amount,
-                        extraPayment: true
+                        id: postResponse.payload[i].id,
+                        name: postResponse.payload[i].name,
+                        amount: postResponse.payload[i].amount,
+                        extraPayment: true-
                     }
                     processedPacket.push(processedPacketObject)
                 }
