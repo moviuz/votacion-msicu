@@ -1,11 +1,11 @@
 <template>
   <ApiLayout
     :items="files"
-    itemsName="documents"
+    itemsName="files"
     :formOpen="formOpen"
     :selectedItem="selectedFile"
     :rendering="rendering"
-    title="Api Documents"
+    title="Api Files"
     @createItem="createItem"
     @editItem="editItem"
     @deleteItem="deleteItem"
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     files() {
-      return this.$store.getters();
+      return this.$store.getters["files/getAllFiles"];
     }
   }
 };
