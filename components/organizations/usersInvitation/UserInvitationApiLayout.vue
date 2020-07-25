@@ -12,7 +12,14 @@
     @deleteItem="deleteItem"
     @closeForm="closeForm"
     @refresh="refresh"
-  ></ApiLayout>
+  >
+    <!--    <template v-slot:item-content="slotProps">
+      <div>
+        <v-icon class="pr-1">mdi-email-send-outline</v-icon>
+        {{slotProps.item.invite_email}}
+      </div>
+    </template>-->
+  </ApiLayout>
 </template>
 <script>
 export default {
@@ -50,7 +57,17 @@ export default {
     },
     createItem() {},
     editItem() {},
-    deleteItem() {},
+    async deleteItem(item) {
+      this.$store.dispatch("organizations/setCurrentInvitation", item, {
+        root: true
+      });
+      let deleteResponse = await this.$store.dispatch(
+        "organizations/deleteInvitationFromOrganization"
+      );
+      if (deleteResponse && deleteResponse.ok) {
+        this.refresh();
+      }
+    },
     closeForm() {}
   },
   computed: {

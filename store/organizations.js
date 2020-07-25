@@ -6,7 +6,8 @@ const state = () => ({
     currentOrganizationUsers:[],
     currentOrganizationInvites:[],
     organizations:[],
-    invitation:[],
+    invitation: [],
+    currentInvitation: []
 });
 
 const mutations = {
@@ -43,7 +44,10 @@ const mutations = {
         }
       }
       state.invitation = inv;  
-  },
+    },
+    setCurrentInvitation(state, invitation) {
+      state.currentInvitation = invitation;
+    }
 };
 
 const actions = {
@@ -145,6 +149,22 @@ const actions = {
       } 
       return postResponse.data.payload;
   },
+  
+  //Manda a mutations la invitacion seleccionada
+  async setCurrentInvitation(vuexContext, invitation) {
+    vuexContext.commit('setCurrentInvitation',invitation); 
+  },
+  
+
+
+  async deleteInvitationFromOrganization(vuexContext, payload) {
+    let currentInvitation = vuexContext.getters.currentInvitation;
+    let delInvitation = await api.delete(this, 'organization_invitations/' + currentInvitation.id);
+    if (delInvitation.ok == true) {
+        vuexContext.dispatch('alerts/addSuccessAlert','Se ha eliminado la invitación', {root:true})
+    }
+    return delInvitation
+  }
 };
 
 
@@ -160,7 +180,11 @@ const getters = {
     },
     currentOrganizationInvites:state => {
       return state.currentOrganizationInvites;
+    },
+    currentInvitation:state => {
+    return state.currentInvitation;
     }
+
 };
 const organizationModule = {
     state:state,

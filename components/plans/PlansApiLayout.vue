@@ -30,7 +30,8 @@ export default {
       formOpen: false,
       rendering: true,
       loading: false,
-      spk: null
+      spk: null,
+      planData: {}
     };
   },
   beforeMount() {
@@ -56,7 +57,8 @@ export default {
     },
     editItem(item) {
       this.formOpen = false;
-      console.log("valor spk %o", this.spk);
+      //console.log("PLAN DATA %o", item);
+      this.planData = item;
       this.selectedPlan = item;
       this.formOpen = true;
     },
@@ -66,11 +68,46 @@ export default {
     },
     deleteItem(item) {},
     async saveItem(item) {
-      const stripe = await getStripe();
-      const paymentStripe = await stripe.createPaymentMethod({
-        type: "card",
-        card: item
+      await this.$store.dispatch("payments/setCurrentPlan", this.planData, {
+        root: true
       });
+      const stripe = await getStripe();
+      //false = son las subscripciones
+      if (this.planData.extraPayment == false) {
+        const paymentStripe = await stripe.createPaymentMethod({
+          type: "card",
+          card: item
+        });
+        await this.$store.dispatch("payments/setPaymentStripe", paymentStripe, {
+          root: true
+        });
+        let paymentEndPoint = await this.$store.dispatch(
+          "payments/paymentMethod"
+        );
+      } else {
+        //Si entra aqui quiere decir que se pagara un paquete de documentos
+        let paymentIntentBack = await this.$store.dispatch(
+          "payments/createPaymentIntent",
+          { root: true }
+        );
+
+        console.log("buscando el valor de paymentIntentBack %o");
+        let submitPayment = await stripe.confirmCardPayment(
+          paymentIntentBack.payload.client_secret,
+          {
+            payment_method: {
+              card: item
+            }
+          }
+        );
+        if (submitPayment.paymentIntent.status == "succeeded") {
+          this.$store.dispatch(
+            "alerts/addSuccessAlert",
+            "Se ha realizado con exito el cobro",
+            { root: true }
+          );
+        }
+      }
     },
     async stripeService() {
       let tok = await this.$store.dispatch("payments/stipeToken", "", {
@@ -84,7 +121,11 @@ export default {
   },
   computed: {
     plans() {
-      return this.$store.getters["plans/getAllPlans"];
+      let documents = this.$store.getters["plans/getAllDocuments"];
+      let plans = this.$store.getters["plans/getAllPlans"];
+      //let final = plans.concat(documents);
+      //console.log("valor final de todo %o", final);
+      return plans.concat(documents);
     }
   }
 };

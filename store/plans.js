@@ -1,11 +1,15 @@
 import { api } from "~/assets/js/helpers"
 const state = () => ({
-    plans: {}
+    plans: [],
+    documents: []
 });
 
 const  mutations = {
     setPlans(state, plans) {
         state.plans = plans;
+    },
+    setDocuments(state, documents) {
+        state.documents = documents;
     }
 }
 
@@ -38,7 +42,7 @@ const actions = {
         
         return postResponse
     },
-    async fetchDocuments() {
+    async fetchDocuments(vuexContext, payload) {
         let postResponse = await api.get(this, '/benefits_packets_plans')
         if (postResponse.ok) {
             console.log("respuesta de documenos a procesar %o", postResponse)
@@ -49,11 +53,12 @@ const actions = {
                         id: postResponse.payload[i].id,
                         name: postResponse.payload[i].name,
                         amount: postResponse.payload[i].amount,
-                        extraPayment: true-
+                        extraPayment: true
                     }
                     processedPacket.push(processedPacketObject)
                 }
             }
+            vuexContext.commit('setDocuments',processedPacket)
             }
     },
        
@@ -62,6 +67,9 @@ const actions = {
 const getters = {
     getAllPlans: state => {
         return state.plans
+    },
+    getAllDocuments: state => {
+        return state.documents
     }
 }
 
