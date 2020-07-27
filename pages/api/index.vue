@@ -25,6 +25,11 @@
             <FoldersApiLayout v-if="openFolders"></FoldersApiLayout>
           </div>
         </v-col>
+        <v-col cols="12">
+          <div class="api-separator">
+            <FilesApiLayout></FilesApiLayout>
+          </div>
+        </v-col>
       </v-row>
     </DesktopPanel>
   </div>
@@ -38,6 +43,8 @@ import OrganizationApiLayout from "~/components/organizations/OrganizationApiLay
 import UserApiLayout from "~/components/organizations/users/UserApiLayout";
 import PlansApiLayout from "~/components/plans/PlansApiLayout";
 import InvitationApiLayout from "~/components/organizations/usersInvitation/UserInvitationApiLayout";
+import FilesApiLayout from "~/components/files/FilesApiLayout";
+
 //import OrganizationUserApiLayout con una bandera
 export default {
   middleware: ["auth"],
@@ -48,7 +55,8 @@ export default {
     OrganizationApiLayout,
     UserApiLayout,
     PlansApiLayout,
-    InvitationApiLayout
+    InvitationApiLayout,
+    FilesApiLayout
   },
   data() {
     return {

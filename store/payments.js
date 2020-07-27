@@ -56,7 +56,6 @@ const actions = {
         let currentPlan = vuexContext.getters.getCurrentPlan;
         let postResponse = await api.post(this, '/users/benefits_packets/create_payment_intent', { benefits_packet_plan_id: currentPlan.id });
         if (postResponse.ok) {
-            console.log("SI ENTRA AL OK")
             return postResponse
         }
         return false

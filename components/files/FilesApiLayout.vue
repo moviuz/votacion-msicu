@@ -30,7 +30,9 @@ export default {
   },
   methods: {
     async refresh() {
-      let fetchFiles = await this.$store.dispatch("files/fetchFiles");
+      let fetchFiles = await this.$store.dispatch("files/fetchFiles", "", {
+        root: true
+      });
     },
     createItem() {
       this.formOpen = false;

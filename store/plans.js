@@ -17,7 +17,6 @@ const actions = {
     async fetchPlans(vuexContext, payload) {
         let postResponse = await api.get(this, '/plan_products')
         if (postResponse.ok) {
-            console.log("postResponse??? %o", postResponse)
             let processedPlan=[]
             for (let i = 0; i < postResponse.payload.length; i++) {              
                 for (let x = 0; x < postResponse.payload[i].subscription_plans.length; x++) {
@@ -45,7 +44,6 @@ const actions = {
     async fetchDocuments(vuexContext, payload) {
         let postResponse = await api.get(this, '/benefits_packets_plans')
         if (postResponse.ok) {
-            console.log("respuesta de documenos a procesar %o", postResponse)
             let processedPacket = []
             for (let i = 0; i < postResponse.payload.length; i++){
                 if (postResponse.payload[i].status == 'active') {

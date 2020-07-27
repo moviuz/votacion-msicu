@@ -47,7 +47,7 @@ const mutations = {
     },
     setCurrentInvitation(state, invitation) {
       state.currentInvitation = invitation;
-    }
+  }
 };
 
 const actions = {

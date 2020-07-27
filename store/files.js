@@ -11,8 +11,22 @@ const mutations = {
 }
 
 const actions = {
-    async fetchDocuments(vuexContext, payload) {
-       // hay que validar en que organizacion se encuentra
+    async fetchFiles(vuexContext, payload) {
+        let currentUser = vuexContext.rootGetters['auth/currentUser'];
+        let currentOrganization = vuexContext.rootGetters['organizations/currentOrganization'];
+        let query;
+        if (currentOrganization.id == 0) {
+            query = "/users/" + currentUser.id + "/documents";
+        } else {
+            query = "users/" + currentUser.id + "/documents?organization_id=" + currentOrganization.id;
+        }
+        let postResponse = await api.get(this, query);
+        if (postResponse.ok) {
+            if (postResponse.payload.length > 0) {
+                vuexContext.commit('setFiles', postResponse)
+
+            }
+            console.log("documentos respuesta %o", postResponse)        }
     }
 }
 

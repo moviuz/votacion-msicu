@@ -47,7 +47,9 @@ export default {
   },
   methods: {
     async refresh() {
-      let currentOrganization = this.$store.getters['organizations/currentOrganization'];
+      let currentOrganization = this.$store.getters[
+        "organizations/currentOrganization"
+      ];
       let fetchResponse = await this.$store.dispatch(
         "folders/fetchFolders",
         "",
