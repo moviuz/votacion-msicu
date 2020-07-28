@@ -20,13 +20,18 @@ const actions = {
         } else {
             query = "users/" + currentUser.id + "/documents?organization_id=" + currentOrganization.id;
         }
-        let postResponse = await api.get(this, query);
-        if (postResponse.ok) {
-            if (postResponse.payload.length > 0) {
-                vuexContext.commit('setFiles', postResponse)
-
-            }
-            console.log("documentos respuesta %o", postResponse)        }
+        let postResponse = await api.get(this, query)
+            //.then((documents => {
+                let file, contador, signer
+                /*documents = documents.sort(function (a, b) {
+                    return new Date(b.created_at) - new Date(a.created_at);
+                });*/
+                if (currentOrganization.id == 0) {
+                    let organizations = vuexContext.rootGetters['organizations/userOrganizations'];
+                    documents = documents.filter(d => d.owner_type == 'User' || organizations.findIndex(o => o.id == d.owner_id) == -1)
+                }
+                vuexContext.commit("setDocuments", documents);
+            //})
     }
 }
 
