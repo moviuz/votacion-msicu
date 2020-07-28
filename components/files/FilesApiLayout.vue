@@ -11,10 +11,18 @@
     @deleteItem="deleteItem"
     @closeForm="closeForm"
     @refresh="refresh"
-  ></ApiLayout>
+  >
+    <template slot="form-content">
+      <FileForm :file="selectedFile" @saveItem="saveItem" @loading="loading"></FileForm>
+    </template>
+  </ApiLayout>
 </template>
 <script>
+import FileForm from "~/components/files/FileForm";
 export default {
+  components: {
+    FileForm
+  },
   data() {
     return {
       selectedFile: null,

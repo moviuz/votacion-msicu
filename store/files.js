@@ -26,10 +26,8 @@ const actions = {
             let organizations = vuexContext.rootGetters['organizations/userOrganizations'];
             vuexContext.commit("setFiles", postResponse.payload)
             //documents = documents.filter(d => d.owner_type == 'User' || organizations.findIndex(o => o.id == d.owner_id) == -1)
-          }
-         
-             
-    }
+          }        
+    },
 }
 
 const getters = {

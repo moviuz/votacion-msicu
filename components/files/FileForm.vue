@@ -2,7 +2,7 @@
   <div>
     <v-card elevation="0" class="trasparent">
       <v-card-text>
-        <v-form ref="file_form" v-model="valid" autocomplete="off">
+        <v-form ref="file_form" autocomplete="off">
           <div class="form-label">1. Nombrea tu documento</div>
           <v-text-field
             class="field mb-0"
@@ -63,7 +63,23 @@
 </template>
 <script>
 import rules from "~/assets/js/rules";
-export default {};
+export default {
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      rules,
+      newFile: {
+        name: false,
+        description: false
+      }
+    };
+  }
+};
 </script>
 <style scoped>
 </style>
