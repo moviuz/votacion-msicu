@@ -21,17 +21,14 @@ const actions = {
             query = "users/" + currentUser.id + "/documents?organization_id=" + currentOrganization.id;
         }
         let postResponse = await api.get(this, query)
-            //.then((documents => {
-                let file, contador, signer
-                /*documents = documents.sort(function (a, b) {
-                    return new Date(b.created_at) - new Date(a.created_at);
-                });*/
-                if (currentOrganization.id == 0) {
-                    let organizations = vuexContext.rootGetters['organizations/userOrganizations'];
-                    documents = documents.filter(d => d.owner_type == 'User' || organizations.findIndex(o => o.id == d.owner_id) == -1)
-                }
-                vuexContext.commit("setDocuments", documents);
-            //})
+
+        if(currentOrganization.id == 0){
+            let organizations = vuexContext.rootGetters['organizations/userOrganizations'];
+            vuexContext.commit("setFiles", postResponse.payload)
+            //documents = documents.filter(d => d.owner_type == 'User' || organizations.findIndex(o => o.id == d.owner_id) == -1)
+          }
+         
+             
     }
 }
 
