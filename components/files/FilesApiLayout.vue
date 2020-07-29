@@ -28,7 +28,8 @@ export default {
       selectedFile: null,
       formOpen: false,
       rendering: true,
-      loading: false
+      loading: false,
+      formUser: false
     };
   },
   async mounted() {
@@ -58,7 +59,29 @@ export default {
       this.selectedFile = null;
       this.formOpen = false;
     },
-    async saveItem(item) {}
+    async saveItem(item) {
+      this.loading = true;
+      this.$store.dispatch("files/setNewFile", item, { root: true });
+      let postResponse = await this.$store.dispatch("files/postDocument");
+      if (postResponse.ok) {
+        //mando la el id de a respyesta para asociar el documento con el id
+        this.$store.dispatch("files/setDocument", postResponse.payload);
+        let creatFile = await this.$store.dispatch(
+          "files/createFileOnDocument"
+        );
+        if (item.invitation == true) {
+          let nuevoFirmante = await this.$store.dispatch(
+            "files/addInvitationToDocument"
+          );
+          if (nuevoFirmante.ok) {
+            (this.formOpen = false),
+              (this.formUser = true),
+              await this.refresh();
+            this.loading = false;
+          }
+        }
+      }
+    }
   },
   computed: {
     files() {
