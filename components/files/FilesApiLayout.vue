@@ -50,6 +50,7 @@ export default {
       });
     },
     createItem() {
+      this.formUser = false;
       this.formOpen = false;
       this.selectedFile = null;
       this.formOpen = true;

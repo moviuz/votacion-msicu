@@ -3,7 +3,12 @@
     <v-card elevation="0" class="transparent">
       <v-card-text>
         <v-form ref="add_form" autocomplete="off">
-          <v-row class="mx'0" style="max-width:100%!important" justify="center">
+          <v-row
+            class="mx'0"
+            style="max-width:100%!important"
+            justify="center"
+            v-if="!documentTest.active"
+          >
             <v-col cols="12" v-for="(etapa,indexEtapa) in firmantes" :key="indexEtapa">
               <v-card class="elevation-0 stage-separator">
                 <v-card-text>
@@ -28,11 +33,16 @@
               </div>
             </v-col>
           </v-row>
-          <v-col cols="12" class="px-5 text-center">
+          <v-col cols="12" class="px-5 text-center" v-if="!documentTest.active">
             <v-divider></v-divider>
             <br />
-            <v-btn block :disabled="firmantes.lenght== 0 || dialog" @click="saveItem">Finalizar</v-btn>
+            <v-btn block :disabled="firmantes.lenght == 0 || dacialog" @click="saveItem">Finalizar</v-btn>
           </v-col>
+          <v-cols cols="12" class="px'5 text-center" v-else>
+            <v-divider></v-divider>
+            <br />
+            <v-btn disabled>El documento ya esta configurado</v-btn>
+          </v-cols>
         </v-form>
       </v-card-text>
       <v-dialog v-model="dialog" width="800" persistent>
@@ -169,12 +179,17 @@ export default {
         }
       }
       this.$store.commit("file/setSigners", newSigners);
-    },
-    confirmarFirmantes() {}
+    }
   },
   computed: {
     firmantes() {
+      console.log("entro a firmantes no mms");
       return this.$store.getters["files/externalSigners"];
+    },
+    documentTest() {
+      let test = this.$store.getters["files/getDocument"];
+      console.log("lo que obtiene de documents %o", test);
+      return test;
     }
   }
 };
