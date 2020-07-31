@@ -1,10 +1,12 @@
 import { api } from "~/assets/js/helpers"
+import { signersOfFileByStage } from '~/assets/js/helpers';
 
 const state = () => ({
     files: [],
     newFile: {},
     document: {},
-    fileBase:""
+    fileBase: "",
+    signers: [],
 });
 
 const mutations = {
@@ -19,6 +21,9 @@ const mutations = {
     },
     setFileBase(state, fileBase) {
         state.fileBase = fileBase
+    },
+    setSigners(state, data) {
+        state.signers = [...data]
     }
 }
 
@@ -80,6 +85,53 @@ const actions = {
         let postResponse = await api.post(this, path, postParams)
         return postResponse
     },
+    async getDocument(vuexContext, payload) {
+        let queryToken = vuexContext.rootGetters['auth/token'];
+        let documentData = vuexContext.getters.getDocument;
+        let currentSigner = vuexContext.rootGetters['auth/currentUser']
+        let path = '/documents/' + documentData.id;
+        let postParams = {
+            token:queryToken,
+            signer_id:currentSigner.id
+        }
+        let postResponse = await api.get(this, path, postParams);
+        if (postResponse.ok) {
+            let rawDocument = postResponse.payload;
+            let lastVersionFile  = rawDocument.files.find(d => d.version == rawDocument.last_version);
+            let signersByStage = signersOfFileByStage(rawDocument, lastVersionFile);
+            vuexContext.commit("setSigners", signersByStage)
+
+        }
+    },
+    async confirmDocumentSigners(vuexContext, payload) {
+        let documentData = vuexContext.getters.getDocument;
+        let firmantes = await vuexContext.dispatch("addSignersToDocument")
+        if (!firmantes) return false
+        let path='/documents/'+documentData.id
+        let putResponse = await api.put(this, path, { active: true })
+        if (putResponse.ok) {
+            vuexContext.dispatch('alerts/addSuccessAlert', 'Documento correctamente configurado', { root: true })
+        } else return false
+    },
+    async addSignersToDocument(vuexContext, payload) {
+        let signers = vuexContext.getters.externalSigners;
+        let documentData = vuexContext.getters.getDocument;
+        let newSigners = signers.reduce((acc, etapa) => acc.concat(etapa), [])
+        newSigners = newSigners.filter(signer => !signer.idInvitation)
+        let path = '/documents/'+documentData.id+'/batch_invitations'
+        let postResponse = await api.post(this, path, { invitations: newSigners })
+        if (postResponse.ok) {
+            return true
+        } else return false
+    },
+    async activateDocument(vuexContext, payload) {
+        let documentData = vuexContext.getters.getDocument;
+        let path = '/documents' / +documentData.id
+        let putResponse = await api.put(this, path, { active: true })
+        if (putResponse.ok) {
+            vuexContext.dispatch('alerts/addSuccessAlert', 'Documento correctamente configurado', { root: true })
+        }else return false
+    },
     //Mutations a store
     async setNewFile(vuexContext, payload) {
         vuexContext.commit("setNewFile", payload);
@@ -104,6 +156,9 @@ const getters = {
     },
     getFileBase: state => {
         return state.fileBase
+    },
+    externalSigners: state => {
+        return state.signers
     }
 }
 

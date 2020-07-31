@@ -12,7 +12,34 @@ export const api = {
     put:putFunction,
     delete:deleteFunction
 };
-
+// funciones deferentes
+export function signersOfFileByStage(document,file){
+    let stages = []
+    let userAux
+    let auxStage = 1;
+    document.invitations.forEach(i=>{
+      let signer = file.signers.find(s=>s.email == i.invite_email)
+      if(!i.stage){
+        auxStage = Math.floor(Math.random() * 2) + 1;
+        console.log("no regresa la propiedad stage para %o, se agrega a etapa %i",i.invite_email,auxStage);
+      }
+      userAux = {
+        idInvitation:i.id,
+        has_sign: (signer && signer.status && signer.status== "signed" ) ? true : false, 
+        email: i.invite_email || i.user.email, 
+        name: i.invite_name || i.user.name,
+        avatar_url: (signer) ? signer.user.avatar_url:null, 
+        stage:(i.stage) ? i.stage:auxStage,
+      }
+      if(stages[userAux.stage -1]){
+        stages[userAux.stage -1].push(userAux);
+      } else {
+        stages[userAux.stage - 1] = [userAux];
+      }
+    })
+    return stages;
+  }
+//post,put,get
 async function postFunction(vue,path,payload){
     let response = {...customResponse};
     try {

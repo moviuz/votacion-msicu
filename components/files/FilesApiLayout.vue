@@ -12,16 +12,21 @@
     @closeForm="closeForm"
     @refresh="refresh"
   >
-    <template slot="form-content">
+    <template slot="form-content" v-if="formUser != true">
       <FileForm :file="selectedFile" @saveItem="saveItem" @loading="loading"></FileForm>
+    </template>
+    <template slot="form-content" v-else>
+      <FileAddUserForm @saveItemUser="saveItemUser" @loading="loading"></FileAddUserForm>
     </template>
   </ApiLayout>
 </template>
 <script>
 import FileForm from "~/components/files/FileForm";
+import FileAddUserForm from "~/components/files/FileAddUsersForm";
 export default {
   components: {
-    FileForm
+    FileForm,
+    FileAddUserForm
   },
   data() {
     return {
@@ -29,7 +34,8 @@ export default {
       formOpen: false,
       rendering: true,
       loading: false,
-      formUser: false
+      formUser: false,
+      formPreview: false
     };
   },
   async mounted() {
@@ -48,8 +54,11 @@ export default {
       this.selectedFile = null;
       this.formOpen = true;
     },
-    editItem(item) {
+    async editItem(item) {
+      this.formUser = true;
       this.formOpen = false;
+      this.$store.dispatch("files/setDocument", item);
+      await this.$store.dispatch("files/getDocument");
       this.selectedFile = item;
       this.formOpen = true;
     },
@@ -81,6 +90,20 @@ export default {
           }
         }
       }
+    },
+    async saveItemUser(item) {
+      this.loading = true;
+      let confirmation;
+      if (item.confirmDocumentSigners == true) {
+        confirmation = await this.$store.dispatch(
+          "files/confirmDocumentSigners"
+        );
+        this.formOpen = false;
+      } else {
+        confirmation = await this.$store.dispatch("files/activateDocument");
+        this.formOpen = false;
+      }
+      this.loading = false;
     }
   },
   computed: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card elevation="0" class="trasparent">
+    <v-card elevation="0" class="transparent">
       <v-card-text>
         <v-form ref="file_form" autocomplete="off">
           <div class="form-label">1. Nombrea tu documento</div>
