@@ -29,6 +29,9 @@
           <div class="api-separator">
             <FilesApiLayout></FilesApiLayout>
           </div>
+          <div class="api-separator">
+            <FilesApiLayout></FilesApiLayout>
+          </div>
         </v-col>
       </v-row>
     </DesktopPanel>
