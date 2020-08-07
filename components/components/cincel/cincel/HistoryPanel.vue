@@ -151,15 +151,23 @@ export default {
         */
       } else {
         //se creara una nueva version de un doc existente
-        await this.createFile(
+        this.$store.dispatch("files/setFileBase", this.file, { root: true });
+        let postResponse = await this.$store.dispatch(
+          "files/updateVersionDocument"
+        );
+        if (postResponse.ok) {
+          this.$emit("reload");
+        }
+
+        /*await this.createFile(
           this.document_id,
           this.file,
           `/documents/${this.document_id}/show`
-        );
+        );*/
       }
       this.loading = false;
     },
-    async createFile(document_id, file, redirect_to) {
+    /*async createFile(document_id, file, redirect_to) {
       await this.$axios
         .$post(`/documents/${document_id}/files`, {
           doc: file,
@@ -192,27 +200,27 @@ export default {
           } catch (error) {
             console.log(error);
           }
-          this.$emit("reload");
+          
           //this.$emit("SavedFile");
-           /*
+          
           this.$router.push(redirect_to);
          
           setTimeout(() => {
             window.location.reload(true);
           }, 3000);
-          */
+          
         })
-        .catch(error => {
+         /*.catch(error => {
           this.$store.commit("showErrorNotification", error.message || error);
-          /*
+         
           this.$emit("reload");
           setTimeout(() => {
             window.location.reload(true);
           }, 4000);
-          */
+          
           // this.$router.push(redirect_to)
         });
-    },
+    },*/
     CancelUpload() {
       this.$emit("CancelUpload");
     }

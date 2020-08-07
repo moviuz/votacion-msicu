@@ -5,27 +5,28 @@
     :formOpen="formOpen"
     :selectedItem="selectedFile"
     :rendering="rendering"
-    title="Api Files"
+    title="Api interaction Files"
     @createItem="createItem"
     @editItem="editItem"
     @deleteItem="deleteItem"
+    @closeForm="closeForm"
     @refresh="refresh"
   >
-    <template slot="form-content" v-if="formUser != true">
-      <FileForm :file="selectedFile" @saveItem="saveItem" @loading="loading"></FileForm>
-    </template>
-    <template slot="form-content" v-else>
-      <FileAddUserForm @saveItemUser="saveItemUser" @loading="loading"></FileAddUserForm>
+    <template slot="form-content">
+      <UpdateFileForm
+        :files="selectedFile"
+        @saveItem="saveItem"
+        :user="currentUser"
+        @loading="loading"
+      ></UpdateFileForm>
     </template>
   </ApiLayout>
 </template>
 <script>
-import FileForm from "~/components/files/FileForm";
-import FileAddUserForm from "~/components/files/FileAddUsersForm";
+import UpdateFileForm from "~/components/files/UpdateFileForm";
 export default {
   components: {
-    FileForm,
-    FileAddUserForm
+    UpdateFileForm
   },
   data() {
     return {
@@ -55,12 +56,12 @@ export default {
       this.formOpen = true;
     },
     async editItem(item) {
-      this.formUser = true;
       this.formOpen = false;
       this.$store.dispatch("files/setDocument", item);
       await this.$store.dispatch("files/getDocument");
       this.selectedFile = item;
       this.formOpen = true;
+      console.log("selecyed item files %o", item);
     },
 
     async deleteItem(item) {},
@@ -109,6 +110,9 @@ export default {
   computed: {
     files() {
       return this.$store.getters["files/getAllFiles"];
+    },
+    currentUser() {
+      return this.$store.getters["auth/currentUser"];
     }
   }
 };

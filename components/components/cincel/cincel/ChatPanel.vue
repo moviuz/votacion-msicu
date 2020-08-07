@@ -43,7 +43,7 @@
 
 <script>
 import rules from "~/assets/js/rules";
-import userAvatar from '~/assets/js/userAvatar.js';
+import userAvatar from "~/data/userAvatar";
 export default {
   props: ["comments", "file_id", "user_id", "Bloqueado", "panelHeight"],
   mounted() {
@@ -56,7 +56,7 @@ export default {
       valid: false,
       comment: { text: "", user_id: "" },
       rules,
-      default_avatar:userAvatar,
+      default_avatar: userAvatar
     };
   },
   methods: {

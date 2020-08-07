@@ -75,6 +75,7 @@ const actions = {
     },
 
     async addInvitationToDocument(vuexContext, payload) {
+        console.log("entrar a invitacion")
         let documentData = vuexContext.getters.getDocument;
         let currentUser = vuexContext.rootGetters['auth/currentUser'];
         let path = 'users/' + currentUser.id + '/documents/' + documentData.id + '/invitations';
@@ -97,8 +98,10 @@ const actions = {
         let postResponse = await api.get(this, path, postParams);
         if (postResponse.ok) {
             let rawDocument = postResponse.payload;
-            let lastVersionFile  = rawDocument.files.find(d => d.version == rawDocument.last_version);
+            let lastVersionFile = rawDocument.files.find(d => d.version == rawDocument.last_version);
             let signersByStage = signersOfFileByStage(rawDocument, lastVersionFile);
+            rawDocument.last_version_file = { ...lastVersionFile };
+            vuexContext.commit('setDocument',rawDocument);
             vuexContext.commit("setSigners", signersByStage)
 
         }
@@ -132,6 +135,24 @@ const actions = {
             vuexContext.dispatch('alerts/addSuccessAlert', 'Documento correctamente configurado', { root: true })
         }else return false
     },
+    async updateVersionDocument(vuexContext) {
+        let file = vuexContext.getters.getFileBase;
+        let documentData = vuexContext.getters.getDocument;
+        let path = '/documents/' + documentData.id + '/files'
+        let postParams = {
+            doc: file,
+            status: "unsigned"
+        }
+        let postResponse = await api.post(this, path , postParams)
+        if (postResponse.ok) {
+            let invitation = await vuexContext.dispatch('addInvitationToDocument')
+            console.log("valor de invitation %o", invitation)
+             if (invitation.ok == true) {
+                vuexContext.dispatch('alerts/addSuccessAlert', 'Se genero una nueva version el documento', { root: true })
+            }
+        }
+
+    },
     //Mutations a store
     async setNewFile(vuexContext, payload) {
         vuexContext.commit("setNewFile", payload);
@@ -159,7 +180,7 @@ const getters = {
     },
     externalSigners: state => {
         return state.signers
-    }
+    },
 }
 
 const fileModule = {

@@ -38,6 +38,19 @@ export function signersOfFileByStage(document,file){
       }
     })
     return stages;
+}
+
+export function statusOfDocument(document) {
+    console.log("valord fe documents en helpers %o", document)
+    let lastFile = document.files.find(d=>d.version == document.last_version)
+    if(lastFile){
+      let signedSignersCount = lastFile.signers.reduce((acc,s)=>{return s.status == 'signed' ? acc + 1 : acc}, 0)
+      if(signedSignersCount == 0){
+        return "Nadie ha firmado"
+      }else if(signedSignersCount < document.invitations.length){
+        return `Parcialmente firmado: ${signedSignersCount}/${document.invitations.length}`
+      }else return "Firmado por todos"
+    }
   }
 //post,put,get
 async function postFunction(vue,path,payload){

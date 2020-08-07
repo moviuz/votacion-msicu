@@ -56,7 +56,7 @@ const actions = {
                     processedPacket.push(processedPacketObject)
                 }
             }
-            vuexContext.commit('setDocuments',processedPacket)
+            vuexContext.commit('setDocuments', processedPacket)
             }
     },
        

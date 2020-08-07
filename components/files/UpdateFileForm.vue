@@ -2,56 +2,45 @@
   <div>
     <v-card elevation="0" class="transparent">
       <v-card-text>
-        <v-form ref="file_form" autocomplete="off">
-          <div class="form-label">1. Nombrea tu documento</div>
-          <v-text-field
-            class="field mb-0"
-            v-model="newFile.name"
-            :rules="[rules.required]"
-            placeholder="Escribe el nombre del documento"
-            outlined
-            dense
-            name="file_name"
-          ></v-text-field>
-          <v-text-field
-            class="field mb-0"
-            v-model="newFile.description"
-            :rules="[rules.required]"
-            placeholder="Descripción"
-            outlined
-            dense
-          ></v-text-field>
-          <div class="form-label">2. Carga tu archivo en formato PDF</div>
-          <div
-            class="body-2 pl-3 pt-2 greey--text"
-          >&nbsp; &nbsp;Selecciona el archivo desde tu computadora</div>
-          <div>
-            <v-card class="fill-height upload-card" elevation="0">
-              <v-card-text v-if="file" class="fill-height pa-0">
-                <embed width="100%" class="fill-height" height="100%" :src="file" />
-              </v-card-text>
-            </v-card>
-          </div>
-          <div>
-            <v-card class="elevation-0" style="border:solid 2px #c0c1c5">
-              <v-card-text style="overflow:auto">
-                <v-input
-                  :value="newFile.file"
-                  @click="clearFileLoader"
-                  hide-details
-                  :rules="[rules.required]"
+        <v-row>
+          <v-col cols="12">
+            <v-card>
+              <v-card-text>
+                <v-tabs
+                  grow
+                  background-color="white"
+                  next-icon="mdi-chevron-right"
+                  prev-icon="mdi-chevron-left"
+                  v-model="tab"
+                  class="mb-4"
                 >
-                  <input type="file" id="files" accept="application/pdf" @change="onFileChange" />
-                </v-input>
+                  <v-tab style="fornt-size:11px!important;text-transform:none">Comentar</v-tab>
+                  <v-tab style="fornt-size:11px!important;text-transform:none">Historial</v-tab>
+                </v-tabs>
+                <v-tabs-items v-model="tab">
+                  <v-tab-item class="fill-height">
+                    <ChatPanel
+                      class="fill-height"
+                      :comments="lastVersionFile.comments"
+                      :Bloqueado="DocumentoBloqueado"
+                      @commentCreatd="addComment($event)"
+                      :user_id="user.user_id"
+                      :file_id="document.id"
+                    ></ChatPanel>
+                  </v-tab-item>
+                  <v-tab-item class="fill-height">
+                    <HistoryPanel
+                      :document_id="document.id"
+                      :document="document"
+                      :lastVersionFile="lastVersionFile"
+                      :Bloqueado="DocumentoBloqueado"
+                    ></HistoryPanel>
+                  </v-tab-item>
+                </v-tabs-items>
               </v-card-text>
             </v-card>
-            <div class="docment-attributes pt-4">
-              <stong class="form-label">
-                <v-checkbox label="Deseo poder firmar este documento" v-model="newFile.invitation"></v-checkbox>
-              </stong>
-            </div>
-          </div>
-        </v-form>
+          </v-col>
+        </v-row>
       </v-card-text>
       <v-card-actions>
         <v-btn @click="clearForm" text :disabled="!aviableSaving || loading">Limpiar</v-btn>
@@ -62,7 +51,10 @@
   </div>
 </template>
 <script>
+import { signersOfFileByStage, statusOfDocument } from "~/assets/js/helpers";
 import rules from "~/assets/js/rules";
+import ChatPanel from "~/components/components/cincel/cincel/ChatPanel";
+import HistoryPanel from "~/components/components/cincel/cincel/HistoryPanel";
 export default {
   props: {
     files: {
@@ -71,10 +63,16 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    user: {
+      type: Object
     }
   },
   mounted() {
-    this.clearForm();
+    //this.clearForm();
+    if (statusOfDocument(this.document) === "Firmado por todos") {
+      this.DocumentoBloqueado = true;
+    }
   },
   data() {
     return {
@@ -86,7 +84,11 @@ export default {
         status: "unsigned",
         invitaiton: false,
         fileBase: ""
-      }
+      },
+      tab: 0,
+      DocumentoBloqueado: false,
+      signersOfFileByStage,
+      statusOfDocument
     };
   },
   methods: {
@@ -101,7 +103,7 @@ export default {
           file: null
         };
       }
-      this.$refs.file_form.resetValidation();
+      // this.$refs.file_form.resetValidation();
     },
     saveItem() {
       this.$emit("saveItem", this.newFile);
@@ -136,6 +138,32 @@ export default {
       if (this.newFile.name && this.newFile.description && this.newFile.file) {
         return true;
       }
+    },
+    BloquearFirma() {
+      if (this.lastVersionFile && this.lastVersionFile.id) {
+        let invitation = this.document.invitations.find(
+          i => i.invite_email == this.user.email
+        );
+        if (!invitation) return true;
+        let signer = this.lastVersionFile.signers.find(
+          s => s.user_id == this.user.id
+        );
+        return signer && signer.status == "signed" ? true : false;
+      }
+      return true;
+    },
+    lastVersionFile() {
+      if (this.document.files && this.document.files.length > 0) {
+        //la ultima version de file debe ser igual a la version de document
+
+        return this.document.files.find(
+          d => d.version == this.document.last_version
+        );
+      }
+      return false;
+    },
+    document() {
+      return this.$store.getters["files/getDocument"];
     }
   }
 };

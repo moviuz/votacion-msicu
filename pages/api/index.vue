@@ -29,8 +29,15 @@
           <div class="api-separator">
             <FilesApiLayout></FilesApiLayout>
           </div>
+        </v-col>
+        <v-col cols="12">
           <div class="api-separator">
-            <FilesApiLayout></FilesApiLayout>
+            <FilesIntereactionApiLayout></FilesIntereactionApiLayout>
+          </div>
+        </v-col>
+        <v-col cols="12">
+          <div class="api-separatos">
+            <NotificationApiLayout></NotificationApiLayout>
           </div>
         </v-col>
       </v-row>
@@ -47,6 +54,8 @@ import UserApiLayout from "~/components/organizations/users/UserApiLayout";
 import PlansApiLayout from "~/components/plans/PlansApiLayout";
 import InvitationApiLayout from "~/components/organizations/usersInvitation/UserInvitationApiLayout";
 import FilesApiLayout from "~/components/files/FilesApiLayout";
+import FilesIntereactionApiLayout from "~/components/files/FilesIntereactionApiLayout";
+import NotificationApiLayout from "~/components/notifications/NotificationApiLayout";
 
 //import OrganizationUserApiLayout con una bandera
 export default {
@@ -59,7 +68,8 @@ export default {
     UserApiLayout,
     PlansApiLayout,
     InvitationApiLayout,
-    FilesApiLayout
+    FilesApiLayout,
+    NotificationApiLayout
   },
   data() {
     return {
