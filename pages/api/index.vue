@@ -27,7 +27,7 @@
         </v-col>
         <v-col cols="12">
           <div class="api-separator">
-            <FilesApiLayout></FilesApiLayout>
+            <FilesApiLayout :organization="organization"></FilesApiLayout>
           </div>
         </v-col>
         <v-col cols="12">

@@ -23,6 +23,14 @@
 import FileForm from "~/components/files/FileForm";
 import FileAddUserForm from "~/components/files/FileAddUsersForm";
 export default {
+  props: {
+    organization: {
+      type: Object,
+      default: function() {
+        return { id: 0 };
+      }
+    }
+  },
   components: {
     FileForm,
     FileAddUserForm
@@ -109,6 +117,12 @@ export default {
   computed: {
     files() {
       return this.$store.getters["files/getAllFiles"];
+    }
+  },
+  watch: {
+    organization: function() {
+      //console.log("watchList check");
+      this.refresh();
     }
   }
 };
