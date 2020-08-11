@@ -83,7 +83,6 @@ export default {
       let document = this.$store.getters[
         "notifications/getAllInvitationDocument"
       ];
-      console.log("esto esta en el array %o", notification.concat(document));
       return notification.concat(document);
     }
   }

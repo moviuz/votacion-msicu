@@ -84,7 +84,6 @@ export default {
   },
   watch: {
     folder: function() {
-      console.log("watchCalled");
       this.clearForm();
     }
   }

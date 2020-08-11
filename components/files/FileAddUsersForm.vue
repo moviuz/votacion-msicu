@@ -183,13 +183,10 @@ export default {
   },
   computed: {
     firmantes() {
-      console.log("entro a firmantes no mms");
       return this.$store.getters["files/externalSigners"];
     },
     documentTest() {
-      let test = this.$store.getters["files/getDocument"];
-      console.log("lo que obtiene de documents %o", test);
-      return test;
+      return this.$store.getters["files/getDocument"];
     }
   }
 };

@@ -87,7 +87,6 @@
                 <v-btn
                   class="cincel-yellow-btn"
                   :loading="loading"
-                  
                   type="submit"
                   variant="primary"
                   :disabled="(loading || !valid) || credentials.password !== password_confirmation || !isDisabled || !checked"
@@ -132,8 +131,6 @@ export default {
   },
   methods: {
     async register() {
-      //console.log("VALOR URL %o", this.credentials.invitation_id);
-      //console.log("VALOR CREDENCIALES %o", this.credentials);
       if (this.valid) {
         this.loading = true;
         let registerA = await this.$store.dispatch(

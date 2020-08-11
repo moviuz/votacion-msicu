@@ -134,7 +134,6 @@ export default {
   },
   watch: {
     user: function() {
-      console.log("watchcalledUserForm");
       this.clearForm();
     }
   }

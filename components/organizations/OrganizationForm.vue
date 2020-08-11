@@ -131,7 +131,6 @@ export default {
   },
   watch: {
     organization: function() {
-      console.log("watchCalledOrganization");
       this.clearForm();
     }
   }

@@ -91,7 +91,6 @@ export default {
           { root: true }
         );
 
-        console.log("buscando el valor de paymentIntentBack %o");
         let submitPayment = await stripe.confirmCardPayment(
           paymentIntentBack.payload.client_secret,
           {
@@ -123,8 +122,6 @@ export default {
     plans() {
       let documents = this.$store.getters["plans/getAllDocuments"];
       let plans = this.$store.getters["plans/getAllPlans"];
-      //let final = plans.concat(documents);
-      //console.log("valor final de todo %o", final);
       return plans.concat(documents);
     }
   }

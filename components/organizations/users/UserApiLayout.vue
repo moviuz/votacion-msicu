@@ -101,7 +101,6 @@ export default {
     },
     async saveItem(item) {
       item.ordanizationId = this.organization.id;
-      //console.log("RECUPERANDO ITEMS VALORES %o", item);
       this.loading = true;
       if (item.invite_rol) {
         let putResponse = await this.$store.dispatch(
@@ -121,7 +120,6 @@ export default {
   },
   watch: {
     organization: function() {
-      //console.log("watchList check");
       this.refresh();
     }
   }

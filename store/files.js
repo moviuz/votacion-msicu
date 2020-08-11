@@ -32,7 +32,6 @@ const actions = {
     async fetchFiles(vuexContext, payload) {
         let currentUser = vuexContext.rootGetters['auth/currentUser'];
         let currentOrganization = vuexContext.rootGetters['organizations/currentOrganization'];
-        console.log("valor de currentOrganization %o", currentOrganization)
         let query;
         if (currentOrganization.id == 0) {
             query = "/users/" + currentUser.id + "/documents";
@@ -80,7 +79,6 @@ const actions = {
     },
 
     async addInvitationToDocument(vuexContext, payload) {
-        console.log("entrar a invitacion")
         let documentData = vuexContext.getters.getDocument;
         let currentUser = vuexContext.rootGetters['auth/currentUser'];
         let path = 'users/' + currentUser.id + '/documents/' + documentData.id + '/invitations';
@@ -151,7 +149,6 @@ const actions = {
         let postResponse = await api.post(this, path , postParams)
         if (postResponse.ok) {
             let invitation = await vuexContext.dispatch('addInvitationToDocument')
-            console.log("valor de invitation %o", invitation)
              if (invitation.ok == true) {
                 vuexContext.dispatch('alerts/addSuccessAlert', 'Se genero una nueva version el documento', { root: true })
             }

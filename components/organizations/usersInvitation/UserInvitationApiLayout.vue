@@ -77,7 +77,6 @@ export default {
   },
   watch: {
     organization: function() {
-      console.log("catcherCalledInvitations");
       this.refresh();
     }
   }

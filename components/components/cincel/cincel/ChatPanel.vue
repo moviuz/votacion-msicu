@@ -48,7 +48,7 @@ export default {
   props: ["comments", "file_id", "user_id", "Bloqueado", "panelHeight"],
   mounted() {
     //console.log(this.comments,this.file_id,this.user_id);
-    console.log(userAvatar);
+    //console.log(userAvatar);
   },
   data() {
     return {

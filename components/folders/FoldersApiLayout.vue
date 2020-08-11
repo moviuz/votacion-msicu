@@ -89,7 +89,6 @@ export default {
           item
         );
         if (putResponse && putResponse.ok) this.formOpen = false;
-        console.log("put %o", item);
       } else {
         let postResponse = await this.$store.dispatch(
           "folders/createFolder",

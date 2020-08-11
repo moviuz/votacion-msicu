@@ -78,6 +78,7 @@ export default {
     },
     async saveItem(item) {
       this.loading = true;
+      //this.$store.commit(ruta mutation/mutation)
       this.$store.dispatch("files/setNewFile", item, { root: true });
       let postResponse = await this.$store.dispatch("files/postDocument");
       if (postResponse.ok) {
@@ -121,7 +122,6 @@ export default {
   },
   watch: {
     organization: function() {
-      //console.log("watchList check");
       this.refresh();
     }
   }

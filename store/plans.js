@@ -30,7 +30,6 @@ const actions = {
                         processedPlanObj.name = postResponse.payload[i].name + ' '+postResponse.payload[i].subscription_plans[x].name,
                         processedPlanObj.id = postResponse.payload[i].subscription_plans[x].id,
                         processedPlanObj.amount = postResponse.payload[i].subscription_plans[x].amount
-                        //console.log("valors process obj %o", processedPlanObj)
                         processedPlan.push(processedPlanObj)
                         }
                     }
