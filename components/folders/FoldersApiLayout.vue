@@ -28,6 +28,14 @@
 import FolderList from "~/components/folders/FolderList";
 import FolderForm from "~/components/folders/FolderForm";
 export default {
+  props: {
+    organization: {
+      type: Object,
+      default: function() {
+        return { id: 0 };
+      }
+    }
+  },
   components: {
     FolderList,
     FolderForm
@@ -103,6 +111,11 @@ export default {
   computed: {
     folders() {
       return this.$store.getters["folders/getAllFolders"];
+    }
+  },
+  watch: {
+    organization: function() {
+      this.refresh();
     }
   }
 };
