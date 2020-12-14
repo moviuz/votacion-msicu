@@ -30,10 +30,10 @@ const mutations = {
 
 const actions = {
     async login(vuexContext,payload){
-        let postResponse = await api.post(this,'/login',payload) //this.$axios.$post('/login', payload);
+        let postResponse = await api.post(this,'/user/login',payload) //this.$axios.$post('/login', payload);
         if (postResponse.ok == true){
-          await vuexContext.dispatch('saveLogin',postResponse.payload);
-          await vuexContext.dispatch('suscriptions/planProducts',{},{root:true});
+          //await vuexContext.dispatch('saveLogin',postResponse.payload);
+          //await vuexContext.dispatch('suscriptions/planProducts',{},{root:true});
           this.$router.push("/")
           return true;
         } else {

@@ -6,12 +6,51 @@
           <div class="text-center title cincel-yellow" color>¡Bienvenido!</div>
           <div class="text-center title font-weight-bold">Ingresa tus datos</div>
         </v-col>
+        <v-row no-gutters row wrap justify="center">
+        <v-col cols="9"  class="pb-2">
+        <br>
+        <v-tabs
+          v-model="selectedPeriod"
+          background-color="white"
+          color="accent-4 text--accent-4"
+          centered
+          grow
+          class="tab-container"
+          hide-slider
+          small
+        >
+          <v-tab
+            v-for="i in type"
+            :key="i.name"
+            active-class="tab-on"
+            style="text-transform: none"
+          >
+            {{ i.str }}
+          </v-tab>
+        </v-tabs>
+      </v-col>
+        </v-row>
         <v-col cols="12" sm="9" md="8">
           <v-form @submit.prevent="login" v-model="valid" id="login-container">
             <v-row no-gutters>
+                <v-col v-if="selectedPeriod!==0">
+                <label class="login-label">
+                  Nombre
+                  <span class="red--text">*</span>
+                </label>
+                <v-text-field
+                  class="login-field"
+                  placeholder="Ingresa tu nombre"
+                  outline
+                  name="nombre"
+                  :rules="[rules.required]"
+                  v-model="nombre"
+                  outlined
+                ></v-text-field>
+              </v-col>
               <v-col cols="12" class="py-3">
                 <label class="login-label">
-                  Usuario
+                  Correo
                   <span class="red--text">*</span>
                 </label>
                 <v-text-field
@@ -40,14 +79,6 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" class="text-center">
-                <p>
-                  <nuxt-link
-                    nuxt
-                    exact
-                    to="/cincel/recoveryMail"
-                    class="grey--text text--darken-2"
-                  >¿Olvidaste tu contraseña?</nuxt-link>
-                </p>
                 <div class="text-center">
                   <v-btn
                     class="cincel-yellow-btn"
@@ -57,11 +88,9 @@
                     variant="primary"
                     :disabled="!valid"
                     @click="login"
-                  >Iniciar sesión</v-btn>
+                  > <span v-if="selectedPeriod===0">Iniciar sesión</span> <span v-else>Registrarme</span></v-btn>
                 </div>
-                <br  />
-                <span >¿No tienes cuenta?</span>  
-                <nuxt-link  nuxt exact to="/cincel/register/" class="primary--text">Crea una</nuxt-link>
+
               </v-col>
             </v-row>
           </v-form>
@@ -84,10 +113,13 @@ export default {
   components: {},
   data() {
     return {
-      email: "formar89@gmail.com",
-      password: "123456",
+      email: "",
+      password: "",
+      nombre:"",
       valid: false,
-      rules
+      type:[{id:1, values:"login", str:"Login"}, {id:2, values:"registro", str:"Registro"}],
+      rules,
+      selectedPeriod:0
     };
   },
   methods: {
@@ -95,7 +127,9 @@ export default {
       if (this.valid) {
         this.$emit('submitForm',{
           email: this.email,
-          password: this.password
+          password: this.password,
+          name: this.nombre,
+          switchPath:this.selectedPeriod
         });
       }
     }
@@ -103,6 +137,29 @@ export default {
 }
 </script>
 <style lang="css" scoped>
+.tab-on {
+  background-color: white;
+  color: #000;
+  font-weight: bold;
+}
+
+.tab-container {
+  background-color: #d8d8d8;
+  border-radius: 40px;
+  overflow: hidden;
+  padding: 4px;
+}
+.tab-container > .v-tabs-bar,
+.v-tabs > .v-tabs-bar {
+  height: 36px !important;
+  background-color: #d8d8d8 !important;
+}
+.v-tab--active {
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 1px 2px 9px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
 #login-container {
   display: flex;
   justify-content: center;

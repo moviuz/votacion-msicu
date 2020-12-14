@@ -37,7 +37,14 @@ export default {
   methods:{
       async Login(e){
         this.loading = true;
-        let response = await this.$store.dispatch('auth/login',e);
+        console.log(e.switchPath)
+        console.log(e)
+        if (e.switchPath === 1){ 
+        let responseRegister = await this.$store.dispatch('auth_ask/register', e);
+        }else{
+        let responseLogin = await this.$store.dispatch('auth_ask/tryLogin', e);
+        }
+        //
         this.loading = false;
      }
   }
