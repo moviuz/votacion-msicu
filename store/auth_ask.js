@@ -8,7 +8,7 @@ export const mutations = {
 }
 
 export const actions = {
-    async tryLogin(vuexContext, payload) { 
+    async tryLogin(payload) { 
         console.log(payload)
         let postResponse = await api.post(this,"/user/login", {
             email: payload.email,

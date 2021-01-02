@@ -66,7 +66,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
-    '@nuxtjs/pwa',
+    '@nuxtjs/pwa', 
   ],
   /*
   ** Axios module configuration
