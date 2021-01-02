@@ -18,10 +18,12 @@
     "@nuxtjs/pwa": "^3.0.0-beta.20",
     "date-fns": "^1.30.1",
     "nuxt": "^2.13.0",
+    "socket.io-client": "^3.0.4",
     "vue-currency-filter": "^5.1.0",
     "vue-image-upload-resize": "^2.3.0",
     "vue-signature-pad": "^2.0.2",
     "vue-socket.io": "^3.0.10",
+    "vue-socket.io-extended": "^4.0.5",
     "vue-stripe-elements-plus": "^0.3.2"
   },
   "devDependencies": {

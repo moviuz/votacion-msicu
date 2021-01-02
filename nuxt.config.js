@@ -45,7 +45,10 @@ export default {
       '~/plugins/global-components',
       '~/plugins/SignaturePad',
       '~/plugins/pretty-date-filter',
-      '~/plugins/currency-filter',
+    '~/plugins/currency-filter',
+      {src: '~/plugins/socket.io.js',
+      ssr:false
+    }
     ],
   /*
   ** Auto import components
