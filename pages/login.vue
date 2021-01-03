@@ -5,6 +5,7 @@
           <v-row  justify="center">
             <v-col cols="12" sm="10" md="7" lg="5" xl="4">
               <v-card class="mt-5">
+                  <nuxt/>
                 <v-card-text class="pa-0">
                   <Login @submitForm="Login" :loading="loading"></Login>
                 </v-card-text>
@@ -28,6 +29,17 @@ export default {
   },
   fetch(){
     sessionStorage.clear();
+  },
+  sockets:{
+      connect: function(){
+          console.log("Clint IO connected")
+      },
+      customEmit: function(data){
+          console.og('ni ptaidea')
+      }
+  },
+  mounted(){
+      this.$socket.on('user-connected', response => {console.log('conectado')})
   },
   data(){
       return {

@@ -5,7 +5,8 @@ export default {
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
   */
-  mode: 'spa',
+    mode: 'spa',
+    ssr:false,
   /*
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
@@ -46,6 +47,7 @@ export default {
       '~/plugins/SignaturePad',
       '~/plugins/pretty-date-filter',
       '~/plugins/currency-filter',
+     {src: '~/plugins/socket.js', ssr:false}
     ],
   /*
   ** Auto import components
@@ -68,13 +70,13 @@ export default {
     '@nuxtjs/dotenv',
     '@nuxtjs/pwa',
   ],
-  /*
+   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
  axios: {
-  baseURL: process.env.API_URL
-},
+     baseURL: process.env.API_URL,
+    },
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module

@@ -18,11 +18,7 @@ const actions = {
     },
     socket_decrement: ({ state, rootState }) => { 
         rootState.io.emit('decrement', state.count)
-    },
-    SOCKET_newQuestion(state, data) {
-        console.log('Mensage action store socket', data)
-     }
-
+    }
 }
 
 const getters = {
