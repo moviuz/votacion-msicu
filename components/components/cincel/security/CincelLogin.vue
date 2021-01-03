@@ -96,34 +96,6 @@ export default {
     };
   },
   methods: {
-    /*
-    async login() {
-      this.loading = true;
-      await this.$axios
-        .$post("/login", {
-          email: this.email,
-          password: this.password
-        })
-        .then(async data => {
-          if (data.errors) {
-            vuexContext.dispatch(
-              "alerts/addErrorAlert",
-              parser.errors(data.errors),
-              { root: true }
-            );
-            return;
-          }
-          await this.$store.dispatch("auth/saveLogin", data);
-          this.$router.push("/cincel/home");
-        })
-        .catch(error => {
-          vuexContext.dispatch("alerts/addErrorAlert", error.message || error, {
-            root: true
-          });
-        });
-      this.loading = false;
-    }
-*/
     async login() {
       if (this.valid) {
         this.loading = true;
@@ -131,17 +103,12 @@ export default {
           email: this.email,
           password: this.password
         });
-        /*
-        console.log(logedIn);
-        if (logedIn) {
-          console.log("esta logeado");
-        } else {
-          console.log("no esta logeado");
-        }
-        */
         this.loading = false;
       }
-    }
+    },
+    testingSocket(){
+       
+    },
   }
 };
 </script>

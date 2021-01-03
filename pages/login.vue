@@ -34,8 +34,17 @@ export default {
           loading:false,
       }
   },
+  sockets: {
+    connect() {
+      console.log('socket connected')
+    },
+    customEmit(val) {
+      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+    }
+  },
   methods:{
       async Login(e){
+        this.$socket.client.emit('newQuestion', 'PRUEBA');
         this.loading = true;
         console.log(e.switchPath)
         console.log(e)
