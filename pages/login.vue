@@ -23,6 +23,14 @@ import Login from '~/components/security/Login'
 export default {
   layout:"empty",
   name:'login',
+  sockets: {
+        connect: function () {
+            console.log('socket connected chingadamadre')
+        },
+        customEmit: function (data) {
+            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+        }
+    },
   components: {
     Login,
   },
@@ -39,11 +47,15 @@ export default {
         this.loading = true;
         console.log(e.switchPath)
         console.log(e)
-        if (e.switchPath === 1){ 
+        console.log('entro a socket')
+        this.$socket.emit("newMessage",{
+            text: 'desde el font perro' 
+        })
+       /* if (e.switchPath === 1){ 
         let responseRegister = await this.$store.dispatch('auth_ask/register', e);
         }else{
         let responseLogin = await this.$store.dispatch('auth_ask/tryLogin', e);
-        }
+        }Ç*/
         //
         this.loading = false;
      }

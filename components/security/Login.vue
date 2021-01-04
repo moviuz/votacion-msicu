@@ -122,6 +122,14 @@ export default {
       selectedPeriod:0
     };
   },
+  sockets: {
+        connect: function () {
+            console.log('socket connected chingadamadre')
+        },
+        customEmit: function (data) {
+            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+        }
+    },
   methods: {
     async login() {
       if (this.valid) {
@@ -132,6 +140,9 @@ export default {
           switchPath:this.selectedPeriod
         });
       }
+    },
+    testMesage(){
+
     }
   }
 }

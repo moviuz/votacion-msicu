@@ -45,7 +45,8 @@ export default {
       '~/plugins/global-components',
       '~/plugins/SignaturePad',
       '~/plugins/pretty-date-filter',
-      '~/plugins/currency-filter',
+        '~/plugins/currency-filter',
+        {src:'~/plugins/socket.js',ssr:false}
     ],
   /*
   ** Auto import components
@@ -73,8 +74,11 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
  axios: {
-  baseURL: process.env.API_URL
+     baseURL: process.env.API_URL,
+     credentials: false,
+     proxyHeaders: false,
 },
+
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
