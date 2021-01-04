@@ -122,16 +122,29 @@ export default {
       selectedPeriod:0
     };
   },
+  sockets: {
+        connect: function () {
+            console.log('socket connected chingadamadre')
+        },
+        customEmit: function (data) {
+            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+        }
+    },
   methods: {
     async login() {
       if (this.valid) {
-        this.$emit('submitForm',{
+        /*this.$emit('submitForm',{
           email: this.email,
           password: this.password,
           name: this.nombre,
           switchPath:this.selectedPeriod
-        });
+        }); */
+         this.$socket.client.emit('newMessage', {data:'testingfront'})
+        //this.socket.$emit
       }
+    },
+    testMesage(){
+
     }
   }
 }
