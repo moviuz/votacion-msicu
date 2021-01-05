@@ -133,19 +133,16 @@ export default {
   methods: {
     async login() {
       if (this.valid) {
-        /*this.$emit('submitForm',{
+        this.$emit('submitForm',{
           email: this.email,
           password: this.password,
           name: this.nombre,
           switchPath:this.selectedPeriod
-        }); */
-         this.$socket.client.emit('newMessage', {data:'testingfront'})
-        //this.socket.$emit
+        }); 
+         //this.$socket.client.emit('newMessage', {data:'testingfront'})
       }
     },
-    testMesage(){
 
-    }
   }
 }
 </script>

@@ -14,11 +14,12 @@ export const actions = {
             email: payload.email,
             password: payload.password
         }).catch((error) => { 
-            this.$store.dispatch("alerts/addErrorAlert", error.message || error, {root:true})
+            vuexContext.dispatch("alerts/addErrorAlert", error.message || error, {root:true})
         })
         if (postResponse.ok === false) {
             console.log("entro a false")
         } else { 
+            vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message,{root:true})
             console.log("estas logeado")
         }
     },
@@ -30,12 +31,12 @@ export const actions = {
             name: payload.name
         }).catch((error) => { 
             console.log(error)
-            this.$store.dispatch('alerts/addErrorAlert', error.message || error, {root:true})
+            vuexContext.dispatch('alerts/addErrorAlert', error.message || error, {root:true})
         })
         if (postResponse.ok === false) {
             console.log('entro false registro')
         } else { 
-            console.log('SALTO FALSE registro')
+            vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message,{root:true})
         }
     }
 }

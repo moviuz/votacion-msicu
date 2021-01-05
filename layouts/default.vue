@@ -71,10 +71,6 @@ export default {
     isLoggedin(){
       return this.$store.getters['auth/isAuthenticated'];
     },
-    currentOrganization(){
-      
-      return this.$store.getters['organizations/currentOrganization']
-    }
   }
 }
 </script>
