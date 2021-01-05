@@ -16,13 +16,12 @@ export const actions = {
         }).catch((error) => { 
             vuexContext.dispatch("alerts/addErrorAlert", error.message || error, {root:true})
         })
-        if (postResponse.ok === false) {
-            vuexContext.dispatch("alerts/addErrorAlert", error.message || error, {root:true})
-            console.log("entro a false")
-        } else { 
-            vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message, {root:true})
-            console.log("estas logeado")
-        }
+        console.log(postResponse)
+        if (postResponse.intercepted === true) {
+            if (postResponse.message) { 
+                vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message, {root:true})
+            }
+        } 
     },
     async register(vuexContext,payload) { 
         console.log(payload)
@@ -34,11 +33,12 @@ export const actions = {
             console.log(error)
             vuexContext.dispatch('alerts/addErrorAlert', error.message || error, {root:true})
         })
-        if (postResponse.ok === false) {
-            console.log('entro false registro')
-        } else { 
-            vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message,{root:true})
-        }
+        console.log('miraesto %o',postResponse)
+        if (postResponse.intercepted === true) {
+            if (postResponse.message) { 
+                vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message, {root:true})
+            }
+        } 
     }
 }
 

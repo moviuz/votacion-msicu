@@ -40,18 +40,7 @@ export function signersOfFileByStage(document,file){
     return stages;
 }
 
-export function statusOfDocument(document) {
-    console.log("valord fe documents en helpers %o", document)
-    let lastFile = document.files.find(d=>d.version == document.last_version)
-    if(lastFile){
-      let signedSignersCount = lastFile.signers.reduce((acc,s)=>{return s.status == 'signed' ? acc + 1 : acc}, 0)
-      if(signedSignersCount == 0){
-        return "Nadie ha firmado"
-      }else if(signedSignersCount < document.invitations.length){
-        return `Parcialmente firmado: ${signedSignersCount}/${document.invitations.length}`
-      }else return "Firmado por todos"
-    }
-  }
+
 //post,put,get
 async function postFunction(vue,path,payload){
     let response = {...customResponse};
@@ -166,19 +155,4 @@ export function decodeJwt(token) {
     return JSON.parse(window.atob(base64));
 };
 
-export function getCurrentRol(permissionsArray) {
-    if (permissionsArray && permissionsArray.length) {
-        if (permissionsArray.length == 0) {
-            return {
-                name: 'Owner',
-                id: 1,
-                permissions: []
-            };
-        }
-        if (permissionsArray.lenght == 9) {
-            return Roles[0];
-        } else {
-            return Roles[1];
-        }
-    }
-}
+
