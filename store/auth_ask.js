@@ -17,9 +17,10 @@ export const actions = {
             vuexContext.dispatch("alerts/addErrorAlert", error.message || error, {root:true})
         })
         if (postResponse.ok === false) {
+            vuexContext.dispatch("alerts/addErrorAlert", error.message || error, {root:true})
             console.log("entro a false")
         } else { 
-            vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message,{root:true})
+            vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message, {root:true})
             console.log("estas logeado")
         }
     },
