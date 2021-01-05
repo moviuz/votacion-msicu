@@ -18,8 +18,8 @@ export const actions = {
         })
         console.log(postResponse)
         if (postResponse.intercepted === true) {
-            if (postResponse.message) { 
-                vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message, {root:true})
+            if (postResponse.payload.userData) { 
+                vuexContext.dispatch('alerts/addSuccessAlert', 'Bienvenido', {root:true})
             }
         } 
     },
