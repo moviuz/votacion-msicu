@@ -1,7 +1,5 @@
 <template>
-  <v-card class="organization-logo  "  :class="[size,activeClass,elevationClass] " 
-    :style="{backgroundImage:'url('+organization.image+')',backgroundSize:'contain',backgroundPosition:'center'}" 
-    @click="clickOnImage(organization)">
+  <v-card class="organization-logo  "  :class="[45,true,true]" >
         <v-card-text class="pa-0" >
         
         </v-card-text>

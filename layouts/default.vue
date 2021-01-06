@@ -1,39 +1,16 @@
 <template>
   <v-app  :light="true">
-    <v-navigation-drawer
-      v-model="drawer"
-      temporary
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-        
-        >
-          <v-list-item-action>
-            <v-icon></v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title  />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
     <v-app-bar
       
-      class="primary"
+      class="blue"
       :clipped-left="clipped"
       :fixed="fixed"
       :absolute="!fixed"
       app
       elevate-on-scroll
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-if="false" />
-        <OrganizationLogo   v-if="false" :elevation="true" :organization="currentOrganization" :size="'sm' " ></OrganizationLogo>
-        
-        <img :src="imagotype" style="width:100px" alt="">
+        <OrganizationLogo :elevation="true" :organization="currentOrganization" :size="'sm' " ></OrganizationLogo>
+        <span>Sistema de preguntas GRUGRU</span>
         <v-spacer ></v-spacer>
         <ToolbarMenu  v-if="isLoggedin"></ToolbarMenu>
     </v-app-bar>
