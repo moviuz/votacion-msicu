@@ -9,9 +9,31 @@
       app
       elevate-on-scroll
     >
-        <OrganizationLogo :elevation="true" :organization="currentOrganization" :size="'sm' " ></OrganizationLogo>
-        <span>Sistema de preguntas GRUGRU</span>
+    <v-menu>
+        <template v-slot:activator="{ on }">
+                <v-btn
+                  outlined
+                  tile
+                  style="
+                    height: 100%;
+                    text-transform: capitalize !important;
+                    border: none !important;
+                  "
+                  v-on="on"
+                >
+                  <v-avatar>
+                      
+                  </v-avatar>
+                  &nbsp;
+                  <span v-if="currentBreakpoint == 'lg'">{{ userName }}</span>
+                  <v-icon>mdi-chevron-down</v-icon>
+                </v-btn>
+              </template>
+    </v-menu>
+       
+        <span> Sistema de preguntas</span>
         <v-spacer ></v-spacer>
+        
         <ToolbarMenu  v-if="isLoggedin"></ToolbarMenu>
     </v-app-bar>
     <v-main class="bgCincel">

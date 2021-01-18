@@ -9,19 +9,6 @@
 <script>
 export default {
     props:{
-        organization:Object,
-        size:{
-            type:String,
-            default:'md'
-        },
-        active:{
-            type:Boolean,
-            default:false,
-        },
-        elevation:{
-            type:Boolean,
-            default:false,
-        }
     },
     mounted(){
      

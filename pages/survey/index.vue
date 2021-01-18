@@ -1,10 +1,9 @@
 <template>
 <v-container>
     <v-row class="fill-height" row wrap justify="center">
-        <v-col cols="12" sm="12" md="8" class="px-1 pb-2 fill-height">
+        <v-col cols="12" md="8" class="px-1 pb-2 fill-height">
             <AskPanel></AskPanel>
         </v-col>
-        <v-col cols="12" sm="12" md="4" class=" pl-11 pb-2"></v-col>
     </v-row>
 </v-container>
 
