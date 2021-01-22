@@ -44,7 +44,6 @@ export default {
         }else{
         let responseLogin = await this.$store.dispatch('auth_ask/tryLogin', e);
         }
-        //
         this.loading = false;
      }
   }

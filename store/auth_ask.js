@@ -2,14 +2,25 @@ import { api } from "~/assets/js/helpers"
 export const state = () => ({
     count: 0,
     token:null,
-    loggedIn:null,
+    loggedIn: null,
+    surveyAuth: {
+        consulta1:null,
+        consulta2:null,
+        consulta3:null,
+        pregunta:null
+    }
 })
 
 export const mutations = {
-    setToken(state,token){
+    setToken(state, token) {
+        console.log('state token %o', token)
         state.token = token;
         state.loggedIn = true;
-      },
+    },
+    setSurvAth(state, data) { 
+        state.surveyAuth = data;
+    }
+
 }
 
 export const actions = {
@@ -26,7 +37,8 @@ export const actions = {
         if (postResponse.intercepted === true) {
             if (postResponse.payload.userData) { 
                 vuexContext.dispatch('alerts/addSuccessAlert', 'Bienvenido', { root: true })
-                vuexContext.commit("setToken",postResponse.payload.token)
+                vuexContext.commit("setToken", postResponse.payload.token)
+                this.$axios.setToken(postResponse.payload.token)
                 this.$router.push("/")
 
             }
@@ -55,6 +67,9 @@ export const getters = {
     isAuthenticated(state) {
         return state.loggedIn;
     },
+    getSurvAtuh(state) { 
+        return state.surveyAuth;
+    }
 }
 
 const loginModule = {

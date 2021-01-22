@@ -9,36 +9,20 @@
       app
       elevate-on-scroll
     >
-    <v-menu>
-        <template v-slot:activator="{ on }">
-                <v-btn
-                  outlined
-                  tile
-                  style="
-                    height: 100%;
-                    text-transform: capitalize !important;
-                    border: none !important;
-                  "
-                  v-on="on"
-                >
-                  <v-avatar>
-                      
-                  </v-avatar>
-                  &nbsp;
-                  <span v-if="currentBreakpoint == 'lg'">{{ userName }}</span>
-                  <v-icon>mdi-chevron-down</v-icon>
-                </v-btn>
-              </template>
-    </v-menu>
-       
-        <span> Sistema de preguntas</span>
+        <v-avatar
+         color="orange"> 
+            <span class="white--text headline"> S </span>
+        </v-avatar>
+        <span> Sistema de preguntas GRUGRU</span>
         <v-spacer ></v-spacer>
-        
-        <ToolbarMenu  v-if="isLoggedin"></ToolbarMenu>
+        <v-btn @click="crearEncuesta">Crear encuesta</v-btn>
+        <DialogPreguntas @closeDialog="closeDialog" @createSurvey="createSurvey" :dialog="dialog"></DialogPreguntas>
+        <div>
+        </div>
     </v-app-bar>
     <v-main class="bgCincel">
       <AlertCard></AlertCard>
-      <nuxt />
+      <nuxt/>
     </v-main>
 
   </v-app>
@@ -46,26 +30,52 @@
 
 <script>
 
-import {ResponsiveMixins} from '~/mixins/ResponsiveMixins';
-import OrganizationLogo from '~/components/ui/OrganizationLogo';
-import ToolbarMenu from '~/components/ui/ToolbarMenu'
+import {mapMutations} from 'vuex'
+import DialogPreguntas from '~/components/ask/dialogPreguntas'
 export default {
   components:{
-      OrganizationLogo,
-      ToolbarMenu
+      DialogPreguntas
   },
-  mixins:[ResponsiveMixins],
+
   data () {
     return {
-      imagotype:'/cincel/cincel-imagotype.png',
       clipped: false,
       drawer: false,
       fixed: true,
       miniVariant: true,
-    
+      dialog: false,   
     }
   },
-  methods:{},
+  methods:{
+      ...mapMutations(['setSurvey']), 
+      crearEncuesta(){
+          this.dialog =  true;
+      },
+      closeDialog(){
+          this.dialog = false;
+      },
+    createSurvey(data){
+        this.$socket.client.emit('newMessage', {data:data})
+
+        this.dialog = false;
+        let  survey = {
+         consulta1:data.consulta1,
+        consulta2:data.consulta2,
+        consulta3:data.consulta3,
+        pregunta:data.pregunta
+        } 
+        this.setSurvey(survey)
+    },
+    
+  },
+    sockets: {
+        connect: function () {
+            console.log('socket connectedaaa')
+        },
+        customEmit: function (data) {
+            console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+        }
+  },
   computed:{
     isLoggedin(){
       return this.$store.getters['auth/isAuthenticated'];
