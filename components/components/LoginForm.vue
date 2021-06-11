@@ -6,6 +6,7 @@
           <v-layout row wrap>
             <v-flex xs12 md12 class="px-2">
               <v-text-field
+              @keydown.space.prevent
               	type="email"
                 label="E-mail"
                 v-model="Mail"
@@ -23,7 +24,7 @@
                 :type="passwordVisible ? 'text' : 'password'"
                 label="Contraseña"
                 v-model="Password"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.minLength(6,'La contraseña debe tener al menos  6 caracteres')]"
                 required
               ></v-text-field>
               <div class="input-error error--text">{{errors.Password}}</div>

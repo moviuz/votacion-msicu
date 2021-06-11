@@ -39,11 +39,12 @@
                   <span class="red--text">*</span>
                 </label>
                 <v-text-field
+                @keydown.space.prevent
                   class="login-field"
                   placeholder="Ingresa tu nombre"
                   outline
                   name="nombre"
-                  :rules="[rules.required]"
+                  :rules="[rules.required,rules.minLength(1,'El nombre debe contener almenos 1 caracter'), rules.maxLength(35, 'Solo soporta hasta 35 caracteres')]"
                   v-model="nombre"
                   outlined
                 ></v-text-field>
@@ -54,10 +55,11 @@
                   <span class="red--text">*</span>
                 </label>
                 <v-text-field
+                @keydown.space.prevent
                   class="login-field"
                   v-model="email"
                   name="email"
-                  :rules="[rules.required]"
+                  :rules="[rules.required,rules.email,rules.maxLength(40, 'El correo tiene un maximo de 40 caracteres')]"
                   placeholder="Ingresa tu correo electrónico"
                   outlined
                 ></v-text-field>
@@ -68,11 +70,12 @@
                   <span class="red--text">*</span>
                 </label>
                 <v-text-field
+                @keydown.space.prevent
                   class="login-field"
                   placeholder="Ingresa tu contraseña "
                   outline
                   name="password"
-                  :rules="[rules.required]"
+                  :rules="[rules.required,rules.minLength(6,'La contraseña debe tener al menos  6 caracteres'), rules.maxLength(8, 'La contraseña tiene un maximo de 10 caracteres')]"
                   type="password"
                   v-model="password"
                   outlined

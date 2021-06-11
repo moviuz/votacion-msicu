@@ -13,7 +13,6 @@ export const state = () => ({
 
 export const mutations = {
     setToken(state, token) {
-        console.log('state token %o', token)
         state.token = token;
         state.loggedIn = true;
     },
@@ -25,15 +24,12 @@ export const mutations = {
 
 export const actions = {
     async tryLogin(vuexContext, payload) { 
-        console.log(payload)
         let postResponse = await api.post(this,"/user/login", {
             email: payload.email,
             password: payload.password
-        }).catch((error) => { 
-            console.log('error login %o', error)
+        }).catch((errors) => { 
             vuexContext.dispatch("alerts/addErrorAlert", error.message || error, {root:true})
         })
-        console.log(postResponse)
         if (postResponse.intercepted === true) {
             if (postResponse.payload.userData) { 
                 vuexContext.dispatch('alerts/addSuccessAlert', 'Bienvenido', { root: true })
@@ -45,20 +41,17 @@ export const actions = {
         } 
     },
     async register(vuexContext,payload) { 
-        console.log(payload)
         let postResponse = await api.post(this, "/user", {
             email: payload.email,
             password: payload.password,
             name: payload.name
         }).catch((error) => { 
-            console.log(error)
             vuexContext.dispatch('alerts/addErrorAlert', error.message || error, {root:true})
         })
-        console.log('miraesto %o',postResponse)
-        if (postResponse.intercepted === true) {
-            if (postResponse.message) { 
+        if (postResponse.ok == true) {
+            //if (postResponse.message) { 
                 vuexContext.dispatch('alerts/addSuccessAlert', postResponse.payload.message, {root:true})
-            }
+            //}
         } 
     }
 }

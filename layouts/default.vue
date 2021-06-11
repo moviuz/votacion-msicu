@@ -47,7 +47,7 @@ export default {
     }
   },
   methods:{
-      ...mapMutations(['setSurvey']), 
+      ...mapMutations(['setSurvey', 'defaultValues','setDisable']), 
       crearEncuesta(){
           this.dialog =  true;
       },
@@ -65,6 +65,8 @@ export default {
         pregunta:data.pregunta
         } 
         this.setSurvey(survey)
+        this.setDisable(true)
+        this.defaultValues()
     },
     
   },
